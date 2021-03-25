@@ -54,7 +54,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel()) {
                 name = "Weight",
                 modifier = Modifier.padding(8.dp).fillMaxWidth(),
                 value = weight,
-                onValueChange = { profileViewModel.onWeightChange(it.toIntOrNull() ?: height) }
+                onValueChange = { profileViewModel.onWeightChange(it.toIntOrNull() ?: weight) }
             )
         }
         item {
@@ -62,7 +62,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel()) {
                 name = "Age",
                 modifier = Modifier.padding(8.dp).fillMaxWidth(),
                 value = age,
-                onValueChange = { profileViewModel.onAgeChange(it.toIntOrNull() ?: height) }
+                onValueChange = { profileViewModel.onAgeChange(it.toIntOrNull() ?: age) }
             )
         }
         item {
