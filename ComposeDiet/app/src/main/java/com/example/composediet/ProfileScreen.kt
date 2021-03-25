@@ -3,55 +3,52 @@ package com.example.composediet
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.mutableStateOf
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 @Composable
 fun ProfileScreen(profileViewModel: ProfileViewModel) {
     val sexDialogState = remember { mutableStateOf(false) }
 
     Column {
-//        Row(
-//            horizontalArrangement = Arrangement.SpaceEvenly,
-//            modifier = Modifier
-//                .padding(2.dp)
-//                .fillMaxWidth()
-//        ) {
-//            Text(text = "Height")
-//            TextField(
-//                value = if (profileViewModel.height.value == -1) "" else profileViewModel.height.value.toString(),
-//                onValueChange = { profileViewModel.onHeightChange(if (it == "") -1 else it.toInt()) }
-//            )
-//        }
-//        Row(
-//            horizontalArrangement = Arrangement.SpaceEvenly,
-//            modifier = Modifier
-//                .padding(2.dp)
-//                .fillMaxWidth()
-//        ) {
-//            Text(text = "Weight")
-//            TextField(
-//                value = if (profileViewModel.weight.value == -1) "" else profileViewModel.weight.value.toString(),
-//                onValueChange = { profileViewModel.onWeightChange(if (it == "") -1 else it.toInt()) }
-//            )
-//        }
-//        Row(
-//            horizontalArrangement = Arrangement.SpaceEvenly,
-//            modifier = Modifier
-//                .padding(2.dp)
-//                .fillMaxWidth()
-//        ) {
-//            Text(text = "Age")
-//            TextField(
-//                value = if (profileViewModel.age.value == -1) "" else profileViewModel.age.value.toString(),
-//                onValueChange = { profileViewModel.onAgeChange(if (it == "") -1 else it.toInt()) }
-//            )
-//        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .padding(2.dp)
+                .fillMaxWidth()
+        ) {
+            Text(text = "Height")
+            TextField(
+                value = if (profileViewModel.height.value == -1) "" else profileViewModel.height.value.toString(),
+                onValueChange = { profileViewModel.onHeightChange(if (it == "") -1 else it.toInt()) }
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .padding(2.dp)
+                .fillMaxWidth()
+        ) {
+            Text(text = "Weight")
+            TextField(
+                value = if (profileViewModel.weight.value == -1) "" else profileViewModel.weight.value.toString(),
+                onValueChange = { profileViewModel.onWeightChange(if (it == "") -1 else it.toInt()) }
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .padding(2.dp)
+                .fillMaxWidth()
+        ) {
+            Text(text = "Age")
+            TextField(
+                value = if (profileViewModel.age.value == -1) "" else profileViewModel.age.value.toString(),
+                onValueChange = { profileViewModel.onAgeChange(if (it == "") -1 else it.toInt()) }
+            )
+        }
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
@@ -64,33 +61,33 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
                 Text(text = "Change")
             }
         }
-//        Row(
-//            horizontalArrangement = Arrangement.SpaceEvenly,
-//            modifier = Modifier
-//                .padding(2.dp)
-//                .fillMaxWidth()
-//        ) {
-//            Text(text = "Diet")
-//            Text(text = if (profileViewModel.diet.value == Diet.Undefined) "Not set" else profileViewModel.diet.value.toString())
-//        }
-//        Row(
-//            horizontalArrangement = Arrangement.SpaceEvenly,
-//            modifier = Modifier
-//                .padding(2.dp)
-//                .fillMaxWidth()
-//        ) {
-//            Text(text = "Diet begin")
-//            Text(text = profileViewModel.dateBegin.value.toString())
-//        }
-//        Row(
-//            horizontalArrangement = Arrangement.SpaceEvenly,
-//            modifier = Modifier
-//                .padding(2.dp)
-//                .fillMaxWidth()
-//        ) {
-//            Text(text = "Diet end")
-//            Text(text = profileViewModel.dateEnd.value.toString())
-//        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .padding(2.dp)
+                .fillMaxWidth()
+        ) {
+            Text(text = "Diet")
+            Text(text = if (profileViewModel.diet.value == Diet.Undefined) "Not set" else profileViewModel.diet.value.toString())
+        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .padding(2.dp)
+                .fillMaxWidth()
+        ) {
+            Text(text = "Diet begin")
+            Text(text = profileViewModel.dateBegin.value.toString())
+        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .padding(2.dp)
+                .fillMaxWidth()
+        ) {
+            Text(text = "Diet end")
+            Text(text = profileViewModel.dateEnd.value.toString())
+        }
     }
     SexDialog(
         show = sexDialogState.value,
