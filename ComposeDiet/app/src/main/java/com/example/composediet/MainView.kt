@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 
 sealed class Screen(val route: String) {
     object Water : Screen("water")
@@ -23,6 +24,7 @@ sealed class Screen(val route: String) {
     object Calendar : Screen("calendar")
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun MainView(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel) {
     val bottomNavItems = listOf(

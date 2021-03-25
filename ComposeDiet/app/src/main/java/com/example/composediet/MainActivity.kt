@@ -5,12 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import com.example.composediet.ui.theme.ComposeDietTheme
 
 class MainActivity : ComponentActivity() {
     val foodViewModel by viewModels<FoodViewModel>()
     val profileViewModel by viewModels<ProfileViewModel>()
 
+    @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

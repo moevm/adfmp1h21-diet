@@ -16,7 +16,7 @@ enum class Sex {
 enum class Diet {
     LoseWeight,
     GetFat,
-    HoldTWeight,
+    HoldWeight,
     Undefined
 }
 
