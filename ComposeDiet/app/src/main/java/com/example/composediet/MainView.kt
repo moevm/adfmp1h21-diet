@@ -1,5 +1,6 @@
 package com.example.composediet
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -24,9 +25,10 @@ sealed class Screen(val route: String) {
     object Calendar : Screen("calendar")
 }
 
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
-fun MainView(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel) {
+fun MainView(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel, waterViewModel: WaterViewModel) {
     val bottomNavItems = listOf(
         Pair(Screen.Water, R.drawable.glass),
         Pair(Screen.Food, R.drawable.food),
@@ -89,7 +91,7 @@ fun MainView(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel) {
         }
     ) {
         NavHost(navController, startDestination = Screen.Profile.route) {
-            composable(Screen.Water.route) { WaterScreen() }
+            composable(Screen.Water.route) { WaterScreen(waterViewModel) }
             composable(Screen.Food.route) {
                 val items: List<FoodItem> by foodViewModel.foodItems.observeAsState(listOf())
                 FoodScreen(
