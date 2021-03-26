@@ -13,6 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 
 sealed class Screen(val route: String) {
     object Water : Screen("water")
@@ -21,8 +24,9 @@ sealed class Screen(val route: String) {
     object Calendar : Screen("calendar")
 }
 
+@ExperimentalComposeUiApi
 @Composable
-fun Navigation() {
+fun MainView(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel) {
     val bottomNavItems = listOf(
         Pair(Screen.Water, R.drawable.glass),
         Pair(Screen.Food, R.drawable.food),
@@ -86,8 +90,15 @@ fun Navigation() {
     ) {
         NavHost(navController, startDestination = Screen.Profile.route) {
             composable(Screen.Water.route) { WaterScreen() }
-            composable(Screen.Food.route) { FoodScreen() }
-            composable(Screen.Profile.route) { ProfileScreen() }
+            composable(Screen.Food.route) {
+                val items: List<FoodItem> by foodViewModel.foodItems.observeAsState(listOf())
+                FoodScreen(
+                    items = items,
+                    onAddItem = { foodViewModel.addItem(it) },
+                    onRemoveItem = { foodViewModel.removeItem(it) }
+                )
+            }
+            composable(Screen.Profile.route) { ProfileScreen(profileViewModel) }
             composable(Screen.Calendar.route) { CalendarScreen() }
         }
     }
