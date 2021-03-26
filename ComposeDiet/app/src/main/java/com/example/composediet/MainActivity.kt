@@ -14,6 +14,7 @@ class MainActivity : ComponentActivity() {
     val profileViewModel by viewModels<ProfileViewModel>()
     val waterViewModel by viewModels<WaterViewModel>()
 
+    @ExperimentalMaterialApi
     @ExperimentalFoundationApi
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {

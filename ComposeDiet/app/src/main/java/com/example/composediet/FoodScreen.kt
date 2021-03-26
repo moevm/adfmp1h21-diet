@@ -5,27 +5,30 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.navigate
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import java.util.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavHostController
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialDialogs
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -110,60 +113,116 @@ fun Product(
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 fun FoodScreen(
+    navController: NavHostController,
     items: List<FoodItem>,
     onAddItem: (FoodItem) -> Unit,
     onRemoveItem: (FoodItem) -> Unit
 ) {
-    var b: Boolean by remember { mutableStateOf(false)}
-    Column() {
-        FoodSearchInput(onItemComplete = { })
-        Box(modifier = Modifier.fillMaxSize()) {
-            LazyColumn(
-                contentPadding = PaddingValues(top = 8.dp)
-            ) {
-                items(items = items) {
-                    FoodRow(
-                        foodItem = it,
-                        onItemClicked = {},
-                        modifier = Modifier.fillParentMaxWidth()
-                    )
+    val toolButtonsVisibilityState = rememberSaveable { mutableStateOf(false) }
+    val productItemDialogState = rememberSaveable { mutableStateOf(false) }
+    val dishItemDialogState = rememberSaveable { mutableStateOf(false) }
+
+    Navigation(navController = navController) {
+        Column {
+            Box(modifier = Modifier.fillMaxSize()) {
+                FoodSearchInput(onItemComplete = { })
+                LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
+                    items(items = items) {
+                        FoodRow(
+                            foodItem = it,
+                            onItemClicked = {},
+                            modifier = Modifier.fillParentMaxWidth()
+                        )
+                    }
                 }
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Bottom,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    if (toolButtonsVisibilityState.value) {
+                        Button(
+                            onClick = { productItemDialogState.value = true},
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(text = "Product")
+                        }
+                        Button(
+                            onClick = { dishItemDialogState.value = true },
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(text = "Dish")
+                        }
+                    }
+                    FloatingActionButton(
+                        onClick = {
+                            toolButtonsVisibilityState.value = !toolButtonsVisibilityState.value
+                        },
+                        backgroundColor = Color.Red,
+                        modifier = Modifier
+                            .padding(bottom = 68.dp)
+                            .padding(end = 12.dp)
+                    ) {
+                        Text("+", fontSize = 30.sp, color = Color.White)
+                    }
+
+                }
+
             }
-            FloatingActionButton(
-                onClick = { b = true},
-                backgroundColor = Color.Red,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 68.dp)
-                    .padding(end = 12.dp)
-            )
-            {
-                Text("+", fontSize = 30.sp, color = Color.White)
-            }
-            if (b) {
+        }
+    }
+
+    ProductItemDialog(
+        show = productItemDialogState.value,
+        onDismissRequest = { productItemDialogState.value = false }
+    )
+    DishItemDialog(
+        show = dishItemDialogState.value,
+        onDismissRequest = { dishItemDialogState.value = false }
+    )
+}
+
+@Composable
+private fun ProductItemDialog(show: Boolean, onDismissRequest: () -> Unit) {
+    if (show) {
+        Dialog(onDismissRequest = onDismissRequest) {
+            Surface(modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "Product dialog")
+                }
             }
         }
     }
 }
 
 @Composable
-private fun emptyView() {
-    Scaffold() {
-        Column(
-            modifier = Modifier
+private fun DishItemDialog(show: Boolean, onDismissRequest: () -> Unit) {
+    if (show) {
+        Dialog(onDismissRequest = onDismissRequest) {
+            Surface(modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Magenta),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = "message",
-                color = MaterialTheme.colors.primary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
+                .padding(8.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "Dish dialog")
+                }
+            }
         }
     }
 }

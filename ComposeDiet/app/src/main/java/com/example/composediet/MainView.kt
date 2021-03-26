@@ -25,83 +25,26 @@ sealed class Screen(val route: String) {
     object Calendar : Screen("calendar")
 }
 
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
 fun MainView(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel, waterViewModel: WaterViewModel) {
-    val bottomNavItems = listOf(
-        Pair(Screen.Water, R.drawable.glass),
-        Pair(Screen.Food, R.drawable.food),
-        Pair(Screen.Profile, R.drawable.profile)
-    )
-
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
 
-    Scaffold(
-        bottomBar = {
-            BottomNavigation {
-                bottomNavItems.forEach { item ->
-                    BottomNavigationItem(
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = item.second),
-                                contentDescription = null
-                            )
-                        },
-                        selected = false,
-                        onClick = {
-                            navController.navigate(item.first.route) {
-                                popUpTo = navController.graph.startDestination
-                                launchSingleTop = true
-                            }
-                        }
-                    )
-                }
-            }
-        },
-        topBar = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "March 2021",
-                    modifier = Modifier.padding(2.dp),
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Week 1",
-                        modifier = Modifier.padding(2.dp)
-                    )
-                    Spacer(Modifier.size(2.dp))
-                    IconButton(
-                        onClick = { navController.navigate(Screen.Calendar.route) }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.calendar),
-                            contentDescription = null
-                        )
-                    }
-                }
-            }
+    NavHost(navController, startDestination = Screen.Profile.route) {
+        composable(Screen.Water.route) { WaterScreen(waterViewModel = waterViewModel, navController = navController) }
+        composable(Screen.Food.route) {
+            val items: List<FoodItem> by foodViewModel.foodItems.observeAsState(listOf())
+            FoodScreen(navController = navController,
+                items = items,
+                onAddItem = { foodViewModel.addItem(it) },
+                onRemoveItem = { foodViewModel.removeItem(it) }
+            )
         }
-    ) {
-        NavHost(navController, startDestination = Screen.Profile.route) {
-            composable(Screen.Water.route) { WaterScreen(waterViewModel) }
-            composable(Screen.Food.route) {
-                val items: List<FoodItem> by foodViewModel.foodItems.observeAsState(listOf())
-                FoodScreen(
-                    items = items,
-                    onAddItem = { foodViewModel.addItem(it) },
-                    onRemoveItem = { foodViewModel.removeItem(it) }
-                )
-            }
-            composable(Screen.Profile.route) { ProfileScreen(profileViewModel) }
-            composable(Screen.Calendar.route) { CalendarScreen() }
-        }
+        composable(Screen.Profile.route) { ProfileScreen(profileViewModel = profileViewModel, navController = navController) }
+        composable(Screen.Calendar.route) { CalendarScreen(navController = navController) }
     }
 }

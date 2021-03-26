@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import kotlin.math.roundToInt
 
 fun Float.roundToDecimals(decimals: Int): Float {
@@ -28,88 +29,90 @@ fun Float.roundToDecimals(decimals: Int): Float {
 
 @ExperimentalFoundationApi
 @Composable
-fun WaterScreen(waterViewModel: WaterViewModel) {
+fun WaterScreen(waterViewModel: WaterViewModel, navController: NavHostController) {
     val drunkWaterNum: Int by waterViewModel.drunkWaterNum.observeAsState(0)
     val oneGlass250: Float = 0.25F
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Row {
-                Text(
-                    text = "Aim: ",
-                    modifier = Modifier.padding(8.dp),
-                    style = typography.h6.copy(fontSize = 24.sp)
-                )
-                Text(
-                    text = waterViewModel.waterNumToDrinkAim.value?.times(oneGlass250)
-                        ?.roundToDecimals(3)
-                        .toString(),
-                    modifier = Modifier.padding(8.dp),
-                    style = typography.h6.copy(fontSize = 24.sp)
-                )
-                Text(
-                    text = " litres",
-                    modifier = Modifier.padding(8.dp),
-                    style = typography.h6.copy(fontSize = 24.sp)
-                )
-            }
-            Row() {
-                Text(
-                    text = "Achieved: ",
-                    modifier = Modifier.padding(8.dp),
-                    style = typography.h6.copy(fontSize = 24.sp)
-                )
-                Text(
-                    text = drunkWaterNum?.times(oneGlass250)
-                        ?.roundToDecimals(3)
-                        .toString(),
-                    modifier = Modifier.padding(8.dp),
-                    style = typography.h6.copy(fontSize = 24.sp)
-                )
-                Text(
-                    text = " litres",
-                    modifier = Modifier.padding(8.dp),
-                    style = typography.h6.copy(fontSize = 24.sp)
-                )
-            }
-        }
-        LazyVerticalGrid(
-            cells = GridCells.Fixed(4),
-            modifier = Modifier.padding(bottom = 64.dp)
-        ) {
-            for (i in 0 until drunkWaterNum) {
-                item {
-                    Image(
-                        painter = painterResource(R.drawable.full_glass_of_water),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .clickable { waterViewModel.onDrunkWaterNumChange(i) }
+    Navigation(navController = navController) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Row {
+                    Text(
+                        text = "Aim: ",
+                        modifier = Modifier.padding(8.dp),
+                        style = typography.h6.copy(fontSize = 24.sp)
+                    )
+                    Text(
+                        text = waterViewModel.waterNumToDrinkAim.value?.times(oneGlass250)
+                            ?.roundToDecimals(3)
+                            .toString(),
+                        modifier = Modifier.padding(8.dp),
+                        style = typography.h6.copy(fontSize = 24.sp)
+                    )
+                    Text(
+                        text = " litres",
+                        modifier = Modifier.padding(8.dp),
+                        style = typography.h6.copy(fontSize = 24.sp)
+                    )
+                }
+                Row() {
+                    Text(
+                        text = "Achieved: ",
+                        modifier = Modifier.padding(8.dp),
+                        style = typography.h6.copy(fontSize = 24.sp)
+                    )
+                    Text(
+                        text = drunkWaterNum?.times(oneGlass250)
+                            ?.roundToDecimals(3)
+                            .toString(),
+                        modifier = Modifier.padding(8.dp),
+                        style = typography.h6.copy(fontSize = 24.sp)
+                    )
+                    Text(
+                        text = " litres",
+                        modifier = Modifier.padding(8.dp),
+                        style = typography.h6.copy(fontSize = 24.sp)
                     )
                 }
             }
-            if (drunkWaterNum < waterViewModel.waterNumToDrinkAim.value!!) {
-                for (i in 0 until waterViewModel.waterNumToDrinkAim.value!! - drunkWaterNum) {
+            LazyVerticalGrid(
+                cells = GridCells.Fixed(4),
+                modifier = Modifier.padding(bottom = 64.dp)
+            ) {
+                for (i in 0 until drunkWaterNum) {
+                    item {
+                        Image(
+                            painter = painterResource(R.drawable.full_glass_of_water),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .clickable { waterViewModel.onDrunkWaterNumChange(i) }
+                        )
+                    }
+                }
+                if (drunkWaterNum < waterViewModel.waterNumToDrinkAim.value!!) {
+                    for (i in 0 until waterViewModel.waterNumToDrinkAim.value!! - drunkWaterNum) {
+                        item {
+                            Image(
+                                painter = painterResource(R.drawable.empty_glass_of_water),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .clickable { waterViewModel.onDrunkWaterNumChange(drunkWaterNum + i + 1) }
+                            )
+                        }
+                    }
+                }
+                else {
                     item {
                         Image(
                             painter = painterResource(R.drawable.empty_glass_of_water),
                             contentDescription = null,
                             modifier = Modifier
                                 .padding(8.dp)
-                                .clickable { waterViewModel.onDrunkWaterNumChange(drunkWaterNum + i + 1) }
+                                .clickable { waterViewModel.onDrunkWaterNumChange(drunkWaterNum + 1) }
                         )
                     }
-                }
-            }
-            else {
-                item {
-                    Image(
-                        painter = painterResource(R.drawable.empty_glass_of_water),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .clickable { waterViewModel.onDrunkWaterNumChange(drunkWaterNum + 1) }
-                    )
                 }
             }
         }
