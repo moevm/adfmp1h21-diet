@@ -31,7 +31,7 @@ fun ProductsSelectionScreen (
         navController.popBackStack()
     }
 
-    FoodSearchInput(onItemComplete = { })
+//    FoodSearchInput(onItemComplete = { })
     Box {
         LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
             items(items = foodItems.toList()) { foodItem ->
