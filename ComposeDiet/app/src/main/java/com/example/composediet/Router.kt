@@ -25,6 +25,7 @@ sealed class Screen(val route: String) {
     object Calendar : Screen("calendar")
     object ProductDetails : Screen("product/{prop}")
     object DishDetails : Screen("dish/{prop}")
+    object ProductsSelection : Screen("products-selection")
 }
 
 @ExperimentalMaterialApi
@@ -35,10 +36,35 @@ fun Router(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel, wat
     val navController = rememberNavController()
 
     NavHost(navController, startDestination = Screen.Profile.route) {
-        composable(Screen.Water.route) { WaterScreen(waterViewModel = waterViewModel, navController = navController) }
-        composable(Screen.Food.route) {FoodScreen(navController = navController, foodViewModel = foodViewModel) }
-        composable(Screen.Profile.route) { ProfileScreen(profileViewModel = profileViewModel, navController = navController) }
-        composable(Screen.Calendar.route) { CalendarScreen(navController = navController) }
+        composable(Screen.Water.route) {
+            WaterScreen(
+                waterViewModel = waterViewModel,
+                navController = navController
+            )
+        }
+        composable(Screen.Food.route) {
+            FoodScreen(
+                navController = navController,
+                foodViewModel = foodViewModel
+            )
+        }
+        composable(Screen.Profile.route) {
+            ProfileScreen(
+                profileViewModel = profileViewModel,
+                navController = navController
+            )
+        }
+        composable(Screen.Calendar.route) {
+            CalendarScreen(
+                navController = navController
+            )
+        }
+        composable(Screen.ProductsSelection.route) {
+            ProductsSelectionScreen(
+                navController = navController,
+                foodViewModel = foodViewModel
+            )
+        }
         composable(Screen.ProductDetails.route) { backStackEntry ->
             ProductDetailsScreen(
                 navController = navController,
@@ -53,5 +79,6 @@ fun Router(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel, wat
                 backStackEntry.arguments?.getString("prop")
             )
         }
+
     }
 }

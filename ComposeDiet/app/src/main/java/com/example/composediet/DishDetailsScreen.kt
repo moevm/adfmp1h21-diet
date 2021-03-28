@@ -27,7 +27,7 @@ import androidx.navigation.compose.popUpTo
 fun DishDetailsScreen(navController: NavHostController, foodViewModel: FoodViewModel, prop:String?) {
     val toastText = rememberSaveable { mutableStateOf("")}
     val dismiss = {
-        foodViewModel.onDishSelectedChange(null)
+        foodViewModel.onTargetDishChange(null)
         navController.navigate(Screen.Food.route) {
             popUpTo(Screen.Profile.route) {}
         }
@@ -40,13 +40,16 @@ fun DishDetailsScreen(navController: NavHostController, foodViewModel: FoodViewM
         },
         onCreate = {
             if (it.name.value.toString() == "") {
-                toastText.value = "Name must not be empty!"
+                toastText.value = "Denied. Name must not be empty!"
             }
             else if (foodViewModel.foodItemExists(it.name.value.toString())) {
-                toastText.value = "There is product with such name!"
+                toastText.value = "Denied. There is product with such name!"
             }
             else if (foodViewModel.dishExists(it.name.value.toString())) {
-                toastText.value = "There is dish with such name!"
+                toastText.value = "Denied. There is dish with such name!"
+            }
+            else if (it.ingredients.value!!.isEmpty()) {
+                toastText.value = "Denied. Dish must have ingredients!"
             }
             else {
                 foodViewModel.addDish(it)
@@ -56,10 +59,12 @@ fun DishDetailsScreen(navController: NavHostController, foodViewModel: FoodViewM
         onEat = {
             dismiss()
         },
-        onSelectIngredients = {}
-        ,
+        onChangeIngredients = {
+            foodViewModel.onTargetDishChange(it)
+            navController.navigate(Screen.ProductsSelection.route)
+        },
         prop = prop,
-        dish = if (foodViewModel.dishSelected.value != null) foodViewModel.dishSelected.value!! else DishViewModel()
+        dish = if (foodViewModel.targetDish.value != null) foodViewModel.targetDish.value!! else DishViewModel()
     )
 
     Toast(
@@ -79,12 +84,12 @@ private fun DishDialog(
     onDelete: (DishViewModel) -> Unit = {},
     onEat: (DishViewModel) -> Unit = {},
     onCreate: (DishViewModel) -> Unit = {},
-    onSelectIngredients: (DishViewModel) -> Unit = {},
+    onChangeIngredients: (DishViewModel) -> Unit = {},
     prop: String?,
     dish: DishViewModel
 ) {
     val (name, setName) = rememberSaveable { mutableStateOf(dish.name.value.toString()) }
-    val ingredients: List<FoodItemViewModel> by dish.ingredients.observeAsState(listOf())
+    val ingredients: Set<FoodItemViewModel> by dish.ingredients.observeAsState(setOf())
 
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -108,41 +113,54 @@ private fun DishDialog(
                     .fillMaxWidth()
             )
         }
-        items(items = dish.ingredients.value!!) {foodItem ->
+        items(items = ingredients.toList()) {foodItem ->
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .padding(end = 24.dp)
+                    .padding(start = 24.dp)
+                    .fillMaxWidth()
             ) {
                 Text(text = foodItem.name.value.toString())
                 Text(text = "${ foodItem.kilocalories.value } kcal")
             }
         }
         item {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .padding(bottom = 8.dp)
-                    .padding(end = 24.dp)
-                    .padding(start = 24.dp)
-            ) {
-                Text(
-                    text = "Total", fontFamily = FontFamily.Cursive,
-                    fontSize = 24.sp,
-                )
-                Text(
-                    text = "${ingredients.sumOf {it.kilocalories.value!!.toInt()}} kcal",
-                    fontSize = 24.sp
-                )
-            }
-
+            TotalRow(
+                name = "Total proteins",
+                value = "${dish.proteins.value} g"
+            )
+        }
+        item {
+            TotalRow(
+                name = "Total fats",
+                value = "${dish.fats.value} g"
+            )
+        }
+        item {
+            TotalRow(
+                name = "Total carbohydrates",
+                value = "${dish.carbohydrates.value} g"
+            )
+        }
+        item {
+            TotalRow(
+                name = "Total water",
+                value = "${dish.water.value} g"
+            )
+        }
+        item {
+            TotalRow(
+                name = "Total calories",
+                value = "${dish.kilocalories.value} kcal"
+            )
         }
         when(prop) {
             "create" -> {
                 item {
                     Button(
-                        onClick = { onSelectIngredients(dish) },
+                        onClick = { onChangeIngredients(dish) },
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth()
@@ -150,8 +168,11 @@ private fun DishDialog(
                     ) {
                         Text(text = "Select ingredients")
                     }
+                }
+                item {
                     Button(
                         onClick = {
+                            dish.onNameChange(name)
                             onCreate(dish)
                         },
                         modifier = Modifier
@@ -164,6 +185,17 @@ private fun DishDialog(
                 }
             }
             "review" -> {
+                item {
+                    Button(
+                        onClick = { onChangeIngredients(dish) },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text(text = "Edit ingredients")
+                    }
+                }
                 item {
                     Button(
                         onClick = { onDelete(dish) },
@@ -189,5 +221,27 @@ private fun DishDialog(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun TotalRow(name: String, value: String) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .padding(bottom = 8.dp)
+            .padding(end = 24.dp)
+            .padding(start = 24.dp)
+    ) {
+        Text(
+            text = name, fontFamily = FontFamily.Cursive,
+            fontSize = 24.sp,
+        )
+        Text(
+            text = value,
+            fontSize = 24.sp
+        )
     }
 }
