@@ -45,10 +45,7 @@ fun ProductsSelectionScreen (
                             targetDish.removeIngredient(foodItem)
                         }
                     },
-                    checked = fun() : Boolean {
-                        val r = targetDish.exists(foodItem.name.value.toString())
-                        return r
-                    }.invoke()
+                    checked =  targetDish.exists(foodItem.name.value.toString())
                 )
             }
         }
