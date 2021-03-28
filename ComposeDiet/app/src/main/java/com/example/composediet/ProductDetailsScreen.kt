@@ -33,18 +33,23 @@ fun ProductDetailsScreen(navController: NavHostController, foodViewModel: FoodVi
 
     ProductItemDialog(
         onDelete = {
-            foodViewModel.removeFoodItem(it)
-            dismiss()
+            if (foodViewModel.isIngredient(it)) {
+                toastText.value = "Denied. Some dish contains this ingredient!"
+            }
+            else {
+                foodViewModel.removeFoodItem(it)
+                dismiss()
+            }
         },
         onCreate = {
             if (it.name.value.toString() == "") {
-                toastText.value = "Name must not be empty!"
+                toastText.value = "Denied. Name must not be empty!"
             }
             else if (foodViewModel.foodItemExists(it.name.value.toString())) {
-                toastText.value = "There is product with such name!"
+                toastText.value = "Denied. There is product with such name!"
             }
             else if (foodViewModel.dishExists(it.name.value.toString())) {
-                toastText.value = "There is dish with such name!"
+                toastText.value = "Denied. There is dish with such name!"
             }
             else {
                 foodViewModel.addFoodItem(it)

@@ -91,73 +91,92 @@ fun FoodScreen(
     foodViewModel: FoodViewModel
 ) {
     val toolButtonsVisibleState = rememberSaveable { mutableStateOf(false) }
+    val toastText = rememberSaveable { mutableStateOf("")}
     val foodItems: Set<FoodItemViewModel> by foodViewModel.foodItems.observeAsState(setOf())
     val dishes: Set<DishViewModel> by foodViewModel.dishes.observeAsState(setOf())
 
-    Navigation(navController = navController) {
-        Column {
-            Box(modifier = Modifier.fillMaxSize()) {
-                FoodSearchInput(onItemComplete = { })
-                LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
-                    items(items = dishes.toList()) { dish ->
-                        FoodItemRow(
-                            foodItemViewModel = dish,
-                            onItemClicked = {
-                                foodViewModel.onTargetDishChange(dish)
-                                toolButtonsVisibleState.value = false
-                                navController.navigate("dish/review")
-                            },
-                        )
-                    }
-                    items(items = foodItems.toList()) { foodItem ->
-                        FoodItemRow(
-                            foodItemViewModel = foodItem,
-                            onItemClicked = {
-                                foodViewModel.onFoodItemSelectedChange(foodItem)
-                                toolButtonsVisibleState.value = false
-                                navController.navigate("product/review")
-                            },
-                        )
-                    }
-                }
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.Bottom,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    if (toolButtonsVisibleState.value) {
-                        Button(
-                            onClick = {
-                                foodViewModel.onFoodItemSelectedChange(null)
-                                toolButtonsVisibleState.value = false
-                                navController.navigate("product/create")
-                            },
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text(text = "Product")
+    Box {
+        Navigation(navController = navController) {
+            Column {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    FoodSearchInput(onItemComplete = { })
+                    LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
+                        items(items = dishes.toList()) { dish ->
+                            FoodItemRow(
+                                foodItemViewModel = dish,
+                                onItemClicked = {
+                                    foodViewModel.onTargetDishChange(dish)
+                                    toolButtonsVisibleState.value = false
+                                    navController.navigate("dish/review")
+                                },
+                            )
                         }
-                        Button(
-                            onClick = {
-                                foodViewModel.onTargetDishChange(null)
-                                toolButtonsVisibleState.value = false
-                                navController.navigate("dish/create")
-                            },
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text(text = "Dish")
+                        items(items = foodItems.toList()) { foodItem ->
+                            FoodItemRow(
+                                foodItemViewModel = foodItem,
+                                onItemClicked = {
+                                    foodViewModel.onFoodItemSelectedChange(foodItem)
+                                    toolButtonsVisibleState.value = false
+                                    navController.navigate("product/review")
+                                },
+                            )
                         }
                     }
-                    FloatingActionButton(
-                        onClick = { toolButtonsVisibleState.value = !toolButtonsVisibleState.value },
-                        backgroundColor = Color.Red,
-                        modifier = Modifier
-                            .padding(bottom = 68.dp)
-                            .padding(end = 12.dp)
+                    Column(
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.Bottom,
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        Text("+", fontSize = 30.sp, color = Color.White)
+                        if (toolButtonsVisibleState.value) {
+                            Button(
+                                onClick = {
+                                    foodViewModel.onFoodItemSelectedChange(null)
+                                    toolButtonsVisibleState.value = false
+                                    navController.navigate("product/create")
+                                },
+                                modifier = Modifier.padding(16.dp)
+                            ) {
+                                Text(text = "Product")
+                            }
+                            Button(
+                                onClick = {
+                                    if (foodViewModel.foodItems.value!!.isEmpty()) {
+                                        toastText.value =
+                                            "At least one product must exist to create dish!"
+                                    } else {
+                                        foodViewModel.onTargetDishChange(null)
+                                        toolButtonsVisibleState.value = false
+                                        navController.navigate("dish/create")
+                                    }
+                                },
+                                modifier = Modifier.padding(16.dp)
+                            ) {
+                                Text(text = "Dish")
+                            }
+                        }
+                        FloatingActionButton(
+                            onClick = {
+                                toolButtonsVisibleState.value = !toolButtonsVisibleState.value
+                            },
+                            backgroundColor = Color.Red,
+                            modifier = Modifier
+                                .padding(bottom = 68.dp)
+                                .padding(end = 12.dp)
+                        ) {
+                            Text("+", fontSize = 30.sp, color = Color.White)
+                        }
                     }
                 }
             }
         }
+        Toast(
+            show = toastText.value != "",
+            text = toastText.value,
+            onClose = { toastText.value = "" },
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+                .height(56.dp)
+        )
     }
 }

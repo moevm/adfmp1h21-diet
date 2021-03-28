@@ -53,4 +53,13 @@ class FoodViewModel : ViewModel() {
     fun dishExists(targetName: String): Boolean {
         return !dishes.value!!.none { it.name.value == targetName }
     }
+
+    fun isIngredient(foodItem: FoodItemViewModel): Boolean {
+        for (dish in _dishes.value!!) {
+            if (dish.exists(foodItem.name.value.toString())) {
+                return true
+            }
+        }
+        return false
+    }
 }

@@ -40,13 +40,16 @@ fun DishDetailsScreen(navController: NavHostController, foodViewModel: FoodViewM
         },
         onCreate = {
             if (it.name.value.toString() == "") {
-                toastText.value = "Name must not be empty!"
+                toastText.value = "Denied. Name must not be empty!"
             }
             else if (foodViewModel.foodItemExists(it.name.value.toString())) {
-                toastText.value = "There is product with such name!"
+                toastText.value = "Denied. There is product with such name!"
             }
             else if (foodViewModel.dishExists(it.name.value.toString())) {
-                toastText.value = "There is dish with such name!"
+                toastText.value = "Denied. There is dish with such name!"
+            }
+            else if (it.ingredients.value!!.isEmpty()) {
+                toastText.value = "Denied. Dish must have ingredients!"
             }
             else {
                 foodViewModel.addDish(it)
@@ -110,35 +113,48 @@ private fun DishDialog(
                     .fillMaxWidth()
             )
         }
-        items(items = dish.ingredients.value!!.toList()) {foodItem ->
+        items(items = ingredients.toList()) {foodItem ->
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .padding(end = 24.dp)
+                    .padding(start = 24.dp)
+                    .fillMaxWidth()
             ) {
                 Text(text = foodItem.name.value.toString())
                 Text(text = "${ foodItem.kilocalories.value } kcal")
             }
         }
         item {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .padding(bottom = 8.dp)
-                    .padding(end = 24.dp)
-                    .padding(start = 24.dp)
-            ) {
-                Text(
-                    text = "Total", fontFamily = FontFamily.Cursive,
-                    fontSize = 24.sp,
-                )
-                Text(
-                    text = "${ingredients.sumOf {it.kilocalories.value!!.toInt()}} kcal",
-                    fontSize = 24.sp
-                )
-            }
-
+            TotalRow(
+                name = "Total proteins",
+                value = "${dish.proteins.value} g"
+            )
+        }
+        item {
+            TotalRow(
+                name = "Total fats",
+                value = "${dish.fats.value} g"
+            )
+        }
+        item {
+            TotalRow(
+                name = "Total carbohydrates",
+                value = "${dish.carbohydrates.value} g"
+            )
+        }
+        item {
+            TotalRow(
+                name = "Total water",
+                value = "${dish.water.value} g"
+            )
+        }
+        item {
+            TotalRow(
+                name = "Total calories",
+                value = "${dish.kilocalories.value} kcal"
+            )
         }
         when(prop) {
             "create" -> {
@@ -156,6 +172,7 @@ private fun DishDialog(
                 item {
                     Button(
                         onClick = {
+                            dish.onNameChange(name)
                             onCreate(dish)
                         },
                         modifier = Modifier
@@ -204,5 +221,27 @@ private fun DishDialog(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun TotalRow(name: String, value: String) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .padding(bottom = 8.dp)
+            .padding(end = 24.dp)
+            .padding(start = 24.dp)
+    ) {
+        Text(
+            text = name, fontFamily = FontFamily.Cursive,
+            fontSize = 24.sp,
+        )
+        Text(
+            text = value,
+            fontSize = 24.sp
+        )
     }
 }

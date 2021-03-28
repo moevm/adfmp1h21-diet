@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,17 +23,12 @@ fun ProductsSelectionScreen (
     navController: NavHostController,
     foodViewModel: FoodViewModel
 ) {
-    val foodItems: Set<FoodItemViewModel> by foodViewModel.foodItems.observeAsState(setOf())
     val targetDish: DishViewModel by foodViewModel.targetDish.observeAsState(DishViewModel())
+    val dismiss = {  navController.popBackStack()}
 
-    val dismiss = {
-        navController.popBackStack()
-    }
-
-//    FoodSearchInput(onItemComplete = { })
     Box {
         LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
-            items(items = foodItems.toList()) { foodItem ->
+            items(items = foodViewModel.foodItems.value!!.toList()) { foodItem ->
                 FoodItemSelectionRow(
                     foodItemViewModel = foodItem,
                     onCheckChange = {
@@ -84,6 +78,9 @@ fun FoodItemSelectionRow(
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        val (checkedVal, setChecked) = rememberSaveable { mutableStateOf(checked) }
+
+
         Column(modifier = Modifier.defaultMinSize(minWidth = 150.dp)) {
             Text(
                 text = foodItemViewModel.name.value.toString(),
@@ -101,6 +98,12 @@ fun FoodItemSelectionRow(
                 overflow = TextOverflow.Ellipsis
             )
         }
-        Checkbox(checked = checked, onCheckedChange = onCheckChange)
+        Checkbox(
+            checked = checkedVal,
+            onCheckedChange = {
+                setChecked(it)
+                onCheckChange(it)
+            }
+        )
     }
 }

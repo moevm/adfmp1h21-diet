@@ -30,20 +30,39 @@ open class FoodItemViewModel(): ViewModel() {
         _name.value = newName
     }
 
+    fun getProteins(): MutableLiveData<Int> {
+        return _proteins
+    }
+
     fun onProteinsChange(newProteins: Int) {
         _proteins.value = newProteins
     }
 
+    fun getFats(): MutableLiveData<Int> {
+        return _fats
+    }
     fun onFatsChange(newFats: Int) {
         _fats.value = newFats
+    }
+
+    fun getCarbohydrates(): MutableLiveData<Int> {
+        return _carbohydrates
     }
 
     fun onCarbohydratesChange(newCarbohydrates: Int) {
         _carbohydrates.value = newCarbohydrates
     }
 
+    fun getWater(): MutableLiveData<Int> {
+        return _water
+    }
+
     fun onWaterChange(newWater: Int) {
         _water.value = newWater
+    }
+
+    fun getKilocalories(): MutableLiveData<Int> {
+        return _kilocalories
     }
 
     fun onKilocaloriesChange(newKilocalories: Int) {
