@@ -14,6 +14,7 @@ class MainActivity : ComponentActivity() {
     val profileViewModel by viewModels<ProfileViewModel>()
     val waterViewModel by viewModels<WaterViewModel>()
 
+    @ExperimentalMaterialApi
     @ExperimentalFoundationApi
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeDietTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    MainView(foodViewModel,profileViewModel, waterViewModel)
+                    Router(foodViewModel,profileViewModel, waterViewModel)
                 }
             }
         }

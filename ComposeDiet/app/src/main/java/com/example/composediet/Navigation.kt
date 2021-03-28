@@ -1,43 +1,26 @@
 package com.example.composediet
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.*
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigate
 
-sealed class Screen(val route: String) {
-    object Water : Screen("water")
-    object Food : Screen("food")
-    object Profile : Screen("profile")
-    object Calendar : Screen("calendar")
-}
-
-@ExperimentalFoundationApi
-@ExperimentalComposeUiApi
 @Composable
-fun MainView(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel, waterViewModel: WaterViewModel) {
+fun Navigation(navController: NavHostController, content: @Composable ColumnScope.() -> Unit) {
     val bottomNavItems = listOf(
         Pair(Screen.Water, R.drawable.glass),
         Pair(Screen.Food, R.drawable.food),
         Pair(Screen.Profile, R.drawable.profile)
     )
-
-    val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
 
     Scaffold(
         bottomBar = {
@@ -90,18 +73,6 @@ fun MainView(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel, w
             }
         }
     ) {
-        NavHost(navController, startDestination = Screen.Profile.route) {
-            composable(Screen.Water.route) { WaterScreen(waterViewModel) }
-            composable(Screen.Food.route) {
-                val items: List<FoodItem> by foodViewModel.foodItems.observeAsState(listOf())
-                FoodScreen(
-                    items = items,
-                    onAddItem = { foodViewModel.addItem(it) },
-                    onRemoveItem = { foodViewModel.removeItem(it) }
-                )
-            }
-            composable(Screen.Profile.route) { ProfileScreen(profileViewModel) }
-            composable(Screen.Calendar.route) { CalendarScreen() }
-        }
+        ColumnScope.content()
     }
 }
