@@ -1,25 +1,18 @@
 package com.example.composediet
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
 import androidx.compose.runtime.*
@@ -40,18 +33,21 @@ fun ProductDetailsScreen(navController: NavHostController, foodViewModel: FoodVi
 
     ProductItemDialog(
         onDelete = {
-            foodViewModel.removeItem(it)
+            foodViewModel.removeFoodItem(it)
             dismiss()
         },
         onCreate = {
             if (it.name.value.toString() == "") {
                 toastText.value = "Name must not be empty!"
             }
-            else if (foodViewModel.exists(it.name.value.toString())) {
-                toastText.value = "Product exists!"
+            else if (foodViewModel.foodItemExists(it.name.value.toString())) {
+                toastText.value = "There is product with such name!"
+            }
+            else if (foodViewModel.dishExists(it.name.value.toString())) {
+                toastText.value = "There is dish with such name!"
             }
             else {
-                foodViewModel.addItem(it)
+                foodViewModel.addFoodItem(it)
                 dismiss()
             }
         },
@@ -59,7 +55,7 @@ fun ProductDetailsScreen(navController: NavHostController, foodViewModel: FoodVi
                 dismiss()
         },
         prop = prop,
-        foodItem = if (foodViewModel.foodItemSelected.value != null) foodViewModel.foodItemSelected.value!! else FoodItem()
+        foodItem = if (foodViewModel.foodItemSelected.value != null) foodViewModel.foodItemSelected.value!! else FoodItemViewModel()
     )
 
     Toast(
@@ -76,11 +72,11 @@ fun ProductDetailsScreen(navController: NavHostController, foodViewModel: FoodVi
 @ExperimentalComposeUiApi
 @Composable
 private fun ProductItemDialog(
-                          onDelete: (FoodItem) -> Unit = {},
-                          onEat: (FoodItem) -> Unit = {},
-                          onCreate: (FoodItem) -> Unit = {},
-                          prop: String?,
-                          foodItem: FoodItem
+    onDelete: (FoodItemViewModel) -> Unit = {},
+    onEat: (FoodItemViewModel) -> Unit = {},
+    onCreate: (FoodItemViewModel) -> Unit = {},
+    prop: String?,
+    foodItem: FoodItemViewModel
 ) {
     val (name, setName) = rememberSaveable { mutableStateOf(foodItem.name.value.toString()) }
     val (proteins, setProteins) = rememberSaveable { mutableStateOf(foodItem.proteins.value!!.toInt()) }

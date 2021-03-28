@@ -18,12 +18,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.material.Snackbar
 import androidx.navigation.compose.navigate
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun FoodSearchInput(onItemComplete: (FoodItem) -> Unit) {
+fun FoodSearchInput(onItemComplete: (FoodItemViewModel) -> Unit) {
 //    val (text, setText) = remember { mutableStateOf("") }
 //    val submit = {
 //        onItemComplete(FoodItem(text))
@@ -55,10 +54,10 @@ fun FoodSearchInput(onItemComplete: (FoodItem) -> Unit) {
 }
 
 @Composable
-fun FoodRow(foodItem: FoodItem, onItemClicked: (FoodItem) -> Unit, modifier: Modifier = Modifier){
+fun FoodItemRow(foodItemViewModel: FoodItemViewModel, onItemClicked: (FoodItemViewModel) -> Unit, modifier: Modifier = Modifier){
     Row(
         modifier = modifier
-            .clickable { onItemClicked(foodItem) }
+            .clickable { onItemClicked(foodItemViewModel) }
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth()
         ,
@@ -66,16 +65,16 @@ fun FoodRow(foodItem: FoodItem, onItemClicked: (FoodItem) -> Unit, modifier: Mod
     ) {
         Column(modifier = Modifier.defaultMinSize(minWidth = 150.dp)) {
             Text(
-                text = foodItem.name.value.toString(),
+                text = foodItemViewModel.name.value.toString(),
                 style = MaterialTheme.typography.h6.copy(fontSize = 16.sp),
                 color = MaterialTheme.colors.onSurface
             )
             Text(
-                text = "${foodItem.proteins.value} g, " +
-                        "${foodItem.fats.value} g, " +
-                        "${foodItem.carbohydrates.value} g, " +
-                        "${foodItem.water.value} l, " +
-                        "${foodItem.kilocalories.value} kcal",
+                text = "${foodItemViewModel.proteins.value} g, " +
+                        "${foodItemViewModel.fats.value} g, " +
+                        "${foodItemViewModel.carbohydrates.value} g, " +
+                        "${foodItemViewModel.water.value} l, " +
+                        "${foodItemViewModel.kilocalories.value} kcal",
                 style = MaterialTheme.typography.subtitle2,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -92,18 +91,29 @@ fun FoodScreen(
     foodViewModel: FoodViewModel
 ) {
     val toolButtonsVisibleState = rememberSaveable { mutableStateOf(false) }
-    val foodItems: List<FoodItem> by foodViewModel.foodItems.observeAsState(listOf())
+    val foodItems: List<FoodItemViewModel> by foodViewModel.foodItems.observeAsState(listOf())
+    val dishes: List<DishViewModel> by foodViewModel.dishes.observeAsState(listOf())
 
     Navigation(navController = navController) {
         Column {
             Box(modifier = Modifier.fillMaxSize()) {
                 FoodSearchInput(onItemComplete = { })
                 LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
-                    items(items = foodItems) { item ->
-                        FoodRow(
-                            foodItem = item,
+                    items(items = dishes) { dish ->
+                        FoodItemRow(
+                            foodItemViewModel = dish,
                             onItemClicked = {
-                                foodViewModel.onFoodItemSelectedChange(item)
+                                foodViewModel.onDishSelectedChange(dish)
+                                toolButtonsVisibleState.value = false
+                                navController.navigate("dish/review")
+                            },
+                        )
+                    }
+                    items(items = foodItems) { foodItem ->
+                        FoodItemRow(
+                            foodItemViewModel = foodItem,
+                            onItemClicked = {
+                                foodViewModel.onFoodItemSelectedChange(foodItem)
                                 toolButtonsVisibleState.value = false
                                 navController.navigate("product/review")
                             },
@@ -128,7 +138,9 @@ fun FoodScreen(
                         }
                         Button(
                             onClick = {
-
+                                foodViewModel.onDishSelectedChange(null)
+                                toolButtonsVisibleState.value = false
+                                navController.navigate("dish/create")
                             },
                             modifier = Modifier.padding(16.dp)
                         ) {
