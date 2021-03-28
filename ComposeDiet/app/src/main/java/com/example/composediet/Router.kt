@@ -24,6 +24,7 @@ sealed class Screen(val route: String) {
     object Profile : Screen("profile")
     object Calendar : Screen("calendar")
     object ProductDetails : Screen("product/{prop}")
+    object DishDetails : Screen("dish/{prop}")
 }
 
 @ExperimentalMaterialApi
@@ -32,8 +33,6 @@ sealed class Screen(val route: String) {
 @Composable
 fun Router(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel, waterViewModel: WaterViewModel) {
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
 
     NavHost(navController, startDestination = Screen.Profile.route) {
         composable(Screen.Water.route) { WaterScreen(waterViewModel = waterViewModel, navController = navController) }
@@ -42,6 +41,13 @@ fun Router(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel, wat
         composable(Screen.Calendar.route) { CalendarScreen(navController = navController) }
         composable(Screen.ProductDetails.route) { backStackEntry ->
             ProductDetailsScreen(
+                navController = navController,
+                foodViewModel = foodViewModel,
+                backStackEntry.arguments?.getString("prop")
+            )
+        }
+        composable(Screen.DishDetails.route) { backStackEntry ->
+            DishDetailsScreen(
                 navController = navController,
                 foodViewModel = foodViewModel,
                 backStackEntry.arguments?.getString("prop")
