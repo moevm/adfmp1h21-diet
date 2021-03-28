@@ -27,7 +27,7 @@ import androidx.navigation.compose.popUpTo
 fun DishDetailsScreen(navController: NavHostController, foodViewModel: FoodViewModel, prop:String?) {
     val toastText = rememberSaveable { mutableStateOf("")}
     val dismiss = {
-        foodViewModel.onDishSelectedChange(null)
+        foodViewModel.onTargetDishChange(null)
         navController.navigate(Screen.Food.route) {
             popUpTo(Screen.Profile.route) {}
         }
@@ -56,10 +56,12 @@ fun DishDetailsScreen(navController: NavHostController, foodViewModel: FoodViewM
         onEat = {
             dismiss()
         },
-        onSelectIngredients = {}
-        ,
+        onChangeIngredients = {
+            foodViewModel.onTargetDishChange(it)
+            navController.navigate(Screen.ProductsSelection.route)
+        },
         prop = prop,
-        dish = if (foodViewModel.dishSelected.value != null) foodViewModel.dishSelected.value!! else DishViewModel()
+        dish = if (foodViewModel.targetDish.value != null) foodViewModel.targetDish.value!! else DishViewModel()
     )
 
     Toast(
@@ -79,12 +81,12 @@ private fun DishDialog(
     onDelete: (DishViewModel) -> Unit = {},
     onEat: (DishViewModel) -> Unit = {},
     onCreate: (DishViewModel) -> Unit = {},
-    onSelectIngredients: (DishViewModel) -> Unit = {},
+    onChangeIngredients: (DishViewModel) -> Unit = {},
     prop: String?,
     dish: DishViewModel
 ) {
     val (name, setName) = rememberSaveable { mutableStateOf(dish.name.value.toString()) }
-    val ingredients: List<FoodItemViewModel> by dish.ingredients.observeAsState(listOf())
+    val ingredients: Set<FoodItemViewModel> by dish.ingredients.observeAsState(setOf())
 
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -108,7 +110,7 @@ private fun DishDialog(
                     .fillMaxWidth()
             )
         }
-        items(items = dish.ingredients.value!!) {foodItem ->
+        items(items = dish.ingredients.value!!.toList()) {foodItem ->
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth().padding(8.dp)
@@ -142,7 +144,7 @@ private fun DishDialog(
             "create" -> {
                 item {
                     Button(
-                        onClick = { onSelectIngredients(dish) },
+                        onClick = { onChangeIngredients(dish) },
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth()
@@ -150,6 +152,8 @@ private fun DishDialog(
                     ) {
                         Text(text = "Select ingredients")
                     }
+                }
+                item {
                     Button(
                         onClick = {
                             onCreate(dish)
@@ -164,6 +168,17 @@ private fun DishDialog(
                 }
             }
             "review" -> {
+                item {
+                    Button(
+                        onClick = { onChangeIngredients(dish) },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text(text = "Edit ingredients")
+                    }
+                }
                 item {
                     Button(
                         onClick = { onDelete(dish) },

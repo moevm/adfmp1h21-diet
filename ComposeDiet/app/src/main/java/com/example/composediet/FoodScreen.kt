@@ -91,25 +91,25 @@ fun FoodScreen(
     foodViewModel: FoodViewModel
 ) {
     val toolButtonsVisibleState = rememberSaveable { mutableStateOf(false) }
-    val foodItems: List<FoodItemViewModel> by foodViewModel.foodItems.observeAsState(listOf())
-    val dishes: List<DishViewModel> by foodViewModel.dishes.observeAsState(listOf())
+    val foodItems: Set<FoodItemViewModel> by foodViewModel.foodItems.observeAsState(setOf())
+    val dishes: Set<DishViewModel> by foodViewModel.dishes.observeAsState(setOf())
 
     Navigation(navController = navController) {
         Column {
             Box(modifier = Modifier.fillMaxSize()) {
                 FoodSearchInput(onItemComplete = { })
                 LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
-                    items(items = dishes) { dish ->
+                    items(items = dishes.toList()) { dish ->
                         FoodItemRow(
                             foodItemViewModel = dish,
                             onItemClicked = {
-                                foodViewModel.onDishSelectedChange(dish)
+                                foodViewModel.onTargetDishChange(dish)
                                 toolButtonsVisibleState.value = false
                                 navController.navigate("dish/review")
                             },
                         )
                     }
-                    items(items = foodItems) { foodItem ->
+                    items(items = foodItems.toList()) { foodItem ->
                         FoodItemRow(
                             foodItemViewModel = foodItem,
                             onItemClicked = {
@@ -138,7 +138,7 @@ fun FoodScreen(
                         }
                         Button(
                             onClick = {
-                                foodViewModel.onDishSelectedChange(null)
+                                foodViewModel.onTargetDishChange(null)
                                 toolButtonsVisibleState.value = false
                                 navController.navigate("dish/create")
                             },
