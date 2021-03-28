@@ -34,7 +34,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel(), navCo
                     name = "Height",
                     modifier = Modifier.padding(8.dp).fillMaxWidth(),
                     value = height,
-                    onValueChange = { profileViewModel.onHeightChange(it.toIntOrNull() ?: height) }
+                    onValueChange = { profileViewModel.onHeightChange(it) }
                 )
             }
             item {
@@ -42,7 +42,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel(), navCo
                     name = "Weight",
                     modifier = Modifier.padding(8.dp).fillMaxWidth(),
                     value = weight,
-                    onValueChange = { profileViewModel.onWeightChange(it.toIntOrNull() ?: weight) }
+                    onValueChange = { profileViewModel.onWeightChange(it) }
                 )
             }
             item {
@@ -50,7 +50,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel(), navCo
                     name = "Age",
                     modifier = Modifier.padding(8.dp).fillMaxWidth(),
                     value = age,
-                    onValueChange = { profileViewModel.onAgeChange(it.toIntOrNull() ?: age) }
+                    onValueChange = { profileViewModel.onAgeChange(it) }
                 )
             }
             item {

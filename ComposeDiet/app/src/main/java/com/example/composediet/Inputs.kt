@@ -13,15 +13,30 @@ import androidx.compose.ui.text.input.KeyboardType
 
 @ExperimentalComposeUiApi
 @Composable
-fun UnsignedIntInput(name: String, value: Int, onValueChange: (String) -> Unit, modifier: Modifier) {
+fun UnsignedIntInput(name: String, value: Int, onValueChange: (Int) -> Unit, modifier: Modifier) {
     val keyboardController = LocalSoftwareKeyboardController.current
     OutlinedTextField(
         value = if (value == -1) "" else value.toString(),
         modifier = modifier,
         label = { Text(text = name) },
-        onValueChange = onValueChange,
+        onValueChange = { onValueChange(it.toIntOrNull() ?: value) },
         placeholder = { Text(text = "") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number).copy(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hideSoftwareKeyboard() })
+    )
+}
+
+@ExperimentalComposeUiApi
+@Composable
+fun TextInput(name: String, value: String, onValueChange: (String) -> Unit, modifier: Modifier) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    OutlinedTextField(
+        value = value,
+        modifier = modifier,
+        label = { Text(text = name) },
+        onValueChange = onValueChange,
+        placeholder = { Text(text = "") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text).copy(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hideSoftwareKeyboard() })
     )
 }

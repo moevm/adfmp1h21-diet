@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeDietTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    MainView(foodViewModel,profileViewModel, waterViewModel)
+                    Router(foodViewModel,profileViewModel, waterViewModel)
                 }
             }
         }
