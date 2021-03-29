@@ -32,8 +32,10 @@ class DatesRepository @Inject constructor(
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 
     ) {
-    val calendarYear = datesLocalDataSource.year2020
-    val datesSelected = DatesSelectedState(datesLocalDataSource.year2020)
+//    val calendarYear = datesLocalDataSource.year2020
+    val calendarYear = datesLocalDataSource.year2021
+//    val datesSelected = DatesSelectedState(datesLocalDataSource.year2020)
+    val datesSelected = DatesSelectedState(datesLocalDataSource.year2021)
 
     suspend fun onDaySelected(daySelected: DaySelected) = withContext(defaultDispatcher) {
         datesSelected.daySelected(daySelected)

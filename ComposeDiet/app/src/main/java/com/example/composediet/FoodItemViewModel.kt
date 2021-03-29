@@ -24,6 +24,9 @@ open class FoodItemViewModel(): ViewModel() {
     private val _kilocalories = MutableLiveData(0)
     val kilocalories: LiveData<Int> = _kilocalories
 
+    private val _num = MutableLiveData(0)
+    val num: LiveData<Int> = _num
+
     val id: UUID = UUID.randomUUID()
 
     fun onNameChange(newName: String) {
@@ -67,5 +70,9 @@ open class FoodItemViewModel(): ViewModel() {
 
     fun onKilocaloriesChange(newKilocalories: Int) {
         _kilocalories.value = newKilocalories
+    }
+
+    fun onNumChange(newNum: Int) {
+        _num.value = newNum
     }
 }

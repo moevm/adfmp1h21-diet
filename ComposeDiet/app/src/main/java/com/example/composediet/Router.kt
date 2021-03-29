@@ -18,6 +18,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.getValue
 import com.example.composediet.calendar.CalendarViewModel
 import androidx.compose.ui.ExperimentalComposeUiApi
+import java.time.LocalDate
 
 sealed class Screen(val route: String) {
     object Water : Screen("water")
@@ -27,6 +28,7 @@ sealed class Screen(val route: String) {
     object ProductDetails : Screen("product/{prop}")
     object DishDetails : Screen("dish/{prop}")
     object ProductsSelection : Screen("products-selection")
+    object DayFoodHistory : Screen("day-food")
 }
 
 @ExperimentalMaterialApi
@@ -36,9 +38,12 @@ sealed class Screen(val route: String) {
 fun Router(foodViewModel: FoodViewModel,
            profileViewModel: ProfileViewModel,
            waterViewModel: WaterViewModel,
-           calendarViewModel: CalendarViewModel
+           calendarViewModel: CalendarViewModel,
+           foodHistoryViewModel: FoodHistoryViewModel
 ) {
     val navController = rememberNavController()
+
+    val daySelected by calendarViewModel.daySelected.observeAsState(LocalDate.now())
 
     NavHost(navController, startDestination = Screen.Profile.route) {
         composable(Screen.Water.route) {
@@ -75,6 +80,7 @@ fun Router(foodViewModel: FoodViewModel,
             ProductDetailsScreen(
                 navController = navController,
                 foodViewModel = foodViewModel,
+                foodHistoryViewModel = foodHistoryViewModel,
                 backStackEntry.arguments?.getString("prop")
             )
         }
@@ -82,9 +88,16 @@ fun Router(foodViewModel: FoodViewModel,
             DishDetailsScreen(
                 navController = navController,
                 foodViewModel = foodViewModel,
+                foodHistoryViewModel = foodHistoryViewModel,
                 backStackEntry.arguments?.getString("prop")
             )
         }
-
+        composable(Screen.DayFoodHistory.route) {
+            DayFoodHistoryScreen(
+                navController = navController,
+                localDate = daySelected,
+                foodHistoryViewModel = foodHistoryViewModel
+            )
+        }
     }
 }

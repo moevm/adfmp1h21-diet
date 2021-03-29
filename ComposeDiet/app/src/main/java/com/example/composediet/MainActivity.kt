@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
     val profileViewModel by viewModels<ProfileViewModel>()
     val waterViewModel by viewModels<WaterViewModel>()
     val calendarViewModel by viewModels<CalendarViewModel>()
+    val foodHistoryViewModel by viewModels<FoodHistoryViewModel>()
 
     @ExperimentalMaterialApi
     @ExperimentalFoundationApi
@@ -31,7 +32,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeDietTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    Router(foodViewModel,profileViewModel, waterViewModel, calendarViewModel)
+                    Router(
+                        foodViewModel,
+                        profileViewModel,
+                        waterViewModel,
+                        calendarViewModel,
+                        foodHistoryViewModel
+                    )
                 }
             }
         }
