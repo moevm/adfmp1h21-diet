@@ -16,25 +16,30 @@
 
 package com.example.composediet.calendar
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.composediet.calendar.model.DaySelected
 import com.example.composediet.data.DatesRepository
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.composediet.Sex
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class CalendarViewModel @Inject constructor(
-    private val datesRepository: DatesRepository
+    datesRepository: DatesRepository
 ) : ViewModel() {
 
     val datesSelected = datesRepository.datesSelected
     val calendarYear = datesRepository.calendarYear
 
-    fun onDaySelected(daySelected: DaySelected) {
-        viewModelScope.launch {
-            datesRepository.onDaySelected(daySelected)
-        }
+    private val _daySelected = MutableLiveData(LocalDate.now())
+    val daySelected: LiveData<LocalDate> = _daySelected
+
+    fun onDaySelectedChange(localDate: LocalDate) {
+        _daySelected.value = localDate
     }
 }

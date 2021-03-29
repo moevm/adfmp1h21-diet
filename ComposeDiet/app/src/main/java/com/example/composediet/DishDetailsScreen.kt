@@ -21,10 +21,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.navigate
 import androidx.navigation.compose.popUpTo
+import java.time.LocalDateTime
 
 @ExperimentalComposeUiApi
 @Composable
-fun DishDetailsScreen(navController: NavHostController, foodViewModel: FoodViewModel, prop:String?) {
+fun DishDetailsScreen(
+    navController: NavHostController,
+    foodViewModel: FoodViewModel,
+    foodHistoryViewModel: FoodHistoryViewModel,
+    prop:String?) {
     val toastText = rememberSaveable { mutableStateOf("")}
     val dismiss = {
         foodViewModel.onTargetDishChange(null)
@@ -57,6 +62,7 @@ fun DishDetailsScreen(navController: NavHostController, foodViewModel: FoodViewM
             }
         },
         onEat = {
+            foodHistoryViewModel.addDish(it, LocalDateTime.now())
             dismiss()
         },
         onChangeIngredients = {
@@ -89,6 +95,7 @@ private fun DishDialog(
     dish: DishViewModel
 ) {
     val (name, setName) = rememberSaveable { mutableStateOf(dish.name.value.toString()) }
+    val (num, setNum) = rememberSaveable { mutableStateOf(dish.num.value!!.toInt()) }
     val ingredients: Set<FoodItemViewModel> by dish.ingredients.observeAsState(setOf())
 
     val listState = rememberLazyListState()
@@ -113,6 +120,20 @@ private fun DishDialog(
                     .fillMaxWidth()
             )
         }
+        item {
+            UnsignedIntInput(
+                name = "amount",
+                value = num,
+                onValueChange = {
+                    setNum(it)
+                    dish.onNumChange(it)
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+        }
+
         items(items = ingredients.toList()) {foodItem ->
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,

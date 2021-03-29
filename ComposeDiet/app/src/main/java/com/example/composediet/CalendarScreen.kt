@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +20,9 @@ import com.example.composediet.calendar.Calendar
 import com.example.composediet.calendar.model.CalendarDay
 import com.example.composediet.calendar.model.CalendarMonth
 import com.example.composediet.data.CalendarYear
+import java.time.LocalDate
+import androidx.compose.runtime.*
+import java.time.Month
 
 @Composable
 private fun CalendarContent(
@@ -35,7 +39,7 @@ private fun CalendarContent(
 
 @Composable
 fun CalendarScreen(navController: NavHostController, calendarViewModel: CalendarViewModel) {
-    val calendarYear = calendarViewModel.calendarYear
+    val calendarYear= calendarViewModel.calendarYear
 
     Scaffold(topBar = {
         Row(
@@ -50,9 +54,8 @@ fun CalendarScreen(navController: NavHostController, calendarViewModel: Calendar
             selectedDates = calendarViewModel.datesSelected.toString(),
             calendarYear = calendarYear,
             onDayClicked = { calendarDay, calendarMonth ->
-//                calendarViewModel.onDaySelected(
-//                    DaySelected(calendarDay.value.toInt(), calendarMonth, calendarYear)
-//                )
+                calendarViewModel.onDaySelectedChange(LocalDate.of(calendarMonth.year.toInt(), calendarMonth.monthNumber, calendarDay.value.toInt()))
+                navController.navigate(Screen.DayFoodHistory.route)
             }
         )
     }

@@ -19,10 +19,15 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.compose.popUpTo
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 @ExperimentalComposeUiApi
 @Composable
-fun ProductDetailsScreen(navController: NavHostController, foodViewModel: FoodViewModel, prop:String?) {
+fun ProductDetailsScreen(
+    navController: NavHostController,
+    foodViewModel: FoodViewModel,
+    foodHistoryViewModel: FoodHistoryViewModel,
+    prop:String?) {
     val toastText = rememberSaveable { mutableStateOf("")}
     val dismiss = {
         foodViewModel.onFoodItemSelectedChange(null)
@@ -57,7 +62,8 @@ fun ProductDetailsScreen(navController: NavHostController, foodViewModel: FoodVi
             }
         },
         onEat = {
-                dismiss()
+            foodHistoryViewModel.addFoodItem(it, LocalDateTime.now())
+            dismiss()
         },
         prop = prop,
         foodItem = if (foodViewModel.foodItemSelected.value != null) foodViewModel.foodItemSelected.value!! else FoodItemViewModel()
@@ -89,6 +95,7 @@ private fun ProductItemDialog(
     val (carbohydrates, setCarbohydrates) = rememberSaveable { mutableStateOf(foodItem.carbohydrates.value!!.toInt()) }
     val (water, setWater) = rememberSaveable { mutableStateOf(foodItem.water.value!!.toInt()) }
     val (kilocalories, setKilocalories) = rememberSaveable { mutableStateOf(foodItem.kilocalories.value!!.toInt()) }
+    val (num, setNum) = rememberSaveable { mutableStateOf(foodItem.num.value!!.toInt()) }
 
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -171,6 +178,19 @@ private fun ProductItemDialog(
                 onValueChange = {
                     setKilocalories(it)
                     foodItem.onKilocaloriesChange(it)
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+        }
+        item {
+            UnsignedIntInput(
+                name = "amount",
+                value = num,
+                onValueChange = {
+                    setNum(it)
+                    foodItem.onNumChange(it)
                 },
                 modifier = Modifier
                     .padding(8.dp)
