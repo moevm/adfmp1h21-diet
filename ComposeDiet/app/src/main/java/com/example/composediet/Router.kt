@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.getValue
+import com.example.composediet.calendar.CalendarViewModel
 import androidx.compose.ui.ExperimentalComposeUiApi
 
 sealed class Screen(val route: String) {
@@ -32,7 +33,11 @@ sealed class Screen(val route: String) {
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
-fun Router(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel, waterViewModel: WaterViewModel) {
+fun Router(foodViewModel: FoodViewModel,
+           profileViewModel: ProfileViewModel,
+           waterViewModel: WaterViewModel,
+           calendarViewModel: CalendarViewModel
+) {
     val navController = rememberNavController()
 
     NavHost(navController, startDestination = Screen.Profile.route) {
@@ -56,7 +61,8 @@ fun Router(foodViewModel: FoodViewModel, profileViewModel: ProfileViewModel, wat
         }
         composable(Screen.Calendar.route) {
             CalendarScreen(
-                navController = navController
+                navController = navController,
+                calendarViewModel = calendarViewModel
             )
         }
         composable(Screen.ProductsSelection.route) {
