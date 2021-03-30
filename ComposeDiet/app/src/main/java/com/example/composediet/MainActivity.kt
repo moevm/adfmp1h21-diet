@@ -20,7 +20,6 @@ class CoreApplication: Application()
 class MainActivity : ComponentActivity() {
     val foodViewModel by viewModels<FoodViewModel>()
     val profileViewModel by viewModels<ProfileViewModel>()
-    val waterViewModel by viewModels<WaterViewModel>()
     val calendarViewModel by viewModels<CalendarViewModel>()
     val foodHistoryViewModel by viewModels<FoodHistoryViewModel>()
 
@@ -35,7 +34,6 @@ class MainActivity : ComponentActivity() {
                     Router(
                         foodViewModel,
                         profileViewModel,
-                        waterViewModel,
                         calendarViewModel,
                         foodHistoryViewModel
                     )

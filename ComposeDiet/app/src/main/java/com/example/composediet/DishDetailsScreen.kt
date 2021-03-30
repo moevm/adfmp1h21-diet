@@ -29,6 +29,7 @@ fun DishDetailsScreen(
     navController: NavHostController,
     foodViewModel: FoodViewModel,
     foodHistoryViewModel: FoodHistoryViewModel,
+    profileViewModel: ProfileViewModel,
     prop:String?) {
     val toastText = rememberSaveable { mutableStateOf("")}
     val dismiss = {
@@ -62,8 +63,18 @@ fun DishDetailsScreen(
             }
         },
         onEat = {
-            foodHistoryViewModel.addDish(it, LocalDateTime.now())
-            dismiss()
+            try {
+                foodHistoryViewModel.addDish(it, LocalDateTime.now())
+                profileViewModel.onKilocaloriesAchievedChange((it.kilocalories.value!!.toFloat() * it.num.value!!.toFloat() / 100).toInt().toShort())
+                profileViewModel.onDrunkWaterNumChange(it.water.value!!.toShort())
+                profileViewModel.onProteinsAchievedChange((it.proteins.value!!.toFloat() * it.num.value!!.toFloat() / 100).toInt().toShort())
+                profileViewModel.onFatsAchievedChange((it.fats.value!!.toFloat() * it.num.value!!.toFloat() / 100).toInt().toShort())
+                profileViewModel.onCarbohydratesAchievedChange((it.carbohydrates.value!!.toFloat() * it.num.value!!.toFloat() / 100).toInt().toShort())
+                dismiss()
+            }
+            catch (e: NumberFormatException) {
+                toastText.value = "Denied. It's impossible!"
+            }
         },
         onChangeIngredients = {
             foodViewModel.onTargetDishChange(it)

@@ -16,16 +16,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
-
 @ExperimentalComposeUiApi
 @Composable
-fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel(), navController: NavHostController) {
+fun ProfileScreen(profileViewModel: ProfileViewModel, navController: NavHostController) {
     val sexDialogState = rememberSaveable { mutableStateOf(false) }
     val dietDialogState = rememberSaveable { mutableStateOf(false) }
 
-    val height: Int by profileViewModel.height.observeAsState(-1)
-    val weight: Int by profileViewModel.weight.observeAsState(-1)
-    val age: Int by profileViewModel.age.observeAsState(-1)
+    val height: Short by profileViewModel.height.observeAsState((-1).toShort())
+    val weight: Short by profileViewModel.weight.observeAsState((-1).toShort())
+    val weightAim: Short by profileViewModel.weightAim.observeAsState((-1).toShort())
+    val age: Short by profileViewModel.age.observeAsState((-1).toShort())
 
     Navigation(navController = navController) {
         LazyColumn(state = rememberLazyListState()) {
@@ -33,24 +33,32 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel(), navCo
                 UnsignedIntInput(
                     name = "Height",
                     modifier = Modifier.padding(8.dp).fillMaxWidth(),
-                    value = height,
-                    onValueChange = { profileViewModel.onHeightChange(it) }
+                    value = height.toInt(),
+                    onValueChange = { profileViewModel.onHeightChange(it.toShort()) }
                 )
             }
             item {
                 UnsignedIntInput(
-                    name = "Weight",
+                    name = "Current weight",
                     modifier = Modifier.padding(8.dp).fillMaxWidth(),
-                    value = weight,
-                    onValueChange = { profileViewModel.onWeightChange(it) }
+                    value = weight.toInt(),
+                    onValueChange = { profileViewModel.onWeightChange(it.toShort()) }
+                )
+            }
+            item {
+                UnsignedIntInput(
+                    name = "Target weight",
+                    modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                    value = weightAim.toInt(),
+                    onValueChange = { profileViewModel.onWeightAimChange(it.toShort()) }
                 )
             }
             item {
                 UnsignedIntInput(
                     name = "Age",
                     modifier = Modifier.padding(8.dp).fillMaxWidth(),
-                    value = age,
-                    onValueChange = { profileViewModel.onAgeChange(it) }
+                    value = age.toInt(),
+                    onValueChange = { profileViewModel.onAgeChange(it.toShort()) }
                 )
             }
             item {
@@ -85,7 +93,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel(), navCo
                             text = fun(): String {
                                 return when (profileViewModel.diet.value) {
                                     Diet.LoseWeight -> "Losing weight"
-                                    Diet.GetFat -> "Getting fatter"
+                                    Diet.PutOnWeight -> "Putting on weight"
                                     Diet.HoldWeight -> "Holding weight"
                                     else -> "Not set"
                                 }
@@ -145,7 +153,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel(), navCo
             onSubmitButtonClick = {
                 when (it) {
                     0 -> profileViewModel.onDietChange(Diet.LoseWeight)
-                    1 -> profileViewModel.onDietChange(Diet.GetFat)
+                    1 -> profileViewModel.onDietChange(Diet.PutOnWeight)
                     2 -> profileViewModel.onDietChange(Diet.HoldWeight)
                 }
             },
