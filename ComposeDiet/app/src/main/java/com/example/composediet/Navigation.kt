@@ -19,7 +19,8 @@ fun Navigation(navController: NavHostController, content: @Composable ColumnScop
     val bottomNavItems = listOf(
         Pair(Screen.Water, R.drawable.glass),
         Pair(Screen.Food, R.drawable.food),
-        Pair(Screen.Profile, R.drawable.profile)
+        Pair(Screen.Profile, R.drawable.profile),
+        Pair(Screen.Home, R.drawable.home)
     )
 
     Scaffold(

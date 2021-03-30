@@ -19,13 +19,13 @@ import androidx.navigation.NavHostController
 
 @ExperimentalComposeUiApi
 @Composable
-fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel(), navController: NavHostController) {
+fun ProfileScreen(profileViewModel: ProfileViewModel, navController: NavHostController) {
     val sexDialogState = rememberSaveable { mutableStateOf(false) }
     val dietDialogState = rememberSaveable { mutableStateOf(false) }
 
-    val height: Int by profileViewModel.height.observeAsState(-1)
-    val weight: Int by profileViewModel.weight.observeAsState(-1)
-    val age: Int by profileViewModel.age.observeAsState(-1)
+    val height: Short by profileViewModel.height.observeAsState((-1).toShort())
+    val weight: Short by profileViewModel.weight.observeAsState((-1).toShort())
+    val age: Short by profileViewModel.age.observeAsState((-1).toShort())
 
     Navigation(navController = navController) {
         LazyColumn(state = rememberLazyListState()) {
@@ -33,24 +33,24 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = ProfileViewModel(), navCo
                 UnsignedIntInput(
                     name = "Height",
                     modifier = Modifier.padding(8.dp).fillMaxWidth(),
-                    value = height,
-                    onValueChange = { profileViewModel.onHeightChange(it) }
+                    value = height.toInt(),
+                    onValueChange = { profileViewModel.onHeightChange(it.toShort()) }
                 )
             }
             item {
                 UnsignedIntInput(
                     name = "Weight",
                     modifier = Modifier.padding(8.dp).fillMaxWidth(),
-                    value = weight,
-                    onValueChange = { profileViewModel.onWeightChange(it) }
+                    value = weight.toInt(),
+                    onValueChange = { profileViewModel.onWeightChange(it.toShort()) }
                 )
             }
             item {
                 UnsignedIntInput(
                     name = "Age",
                     modifier = Modifier.padding(8.dp).fillMaxWidth(),
-                    value = age,
-                    onValueChange = { profileViewModel.onAgeChange(it) }
+                    value = age.toInt(),
+                    onValueChange = { profileViewModel.onAgeChange(it.toShort()) }
                 )
             }
             item {
