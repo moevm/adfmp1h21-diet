@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,6 +27,8 @@ fun ProductsSelectionScreen (
     val targetDish: DishViewModel by foodViewModel.targetDish.observeAsState(DishViewModel())
     val dismiss = {  navController.popBackStack()}
 
+    var i: Int = 0
+
     Box {
         LazyColumn(contentPadding = PaddingValues(top = 8.dp)) {
             items(items = foodViewModel.foodItems.value!!.toList()) { foodItem ->
@@ -39,8 +42,10 @@ fun ProductsSelectionScreen (
                             targetDish.removeIngredient(foodItem)
                         }
                     },
-                    checked =  targetDish.exists(foodItem.name.value.toString())
+                    checked =  targetDish.exists(foodItem.name.value.toString()),
+                    index = i
                 )
+                i += 1
             }
         }
         Column(
@@ -70,41 +75,50 @@ fun FoodItemSelectionRow(
     foodItemViewModel: FoodItemViewModel,
     modifier: Modifier = Modifier,
     checked: Boolean,
-    onCheckChange: (Boolean) -> Unit
+    onCheckChange: (Boolean) -> Unit,
+    index: Int
 ){
-    Row(
-        modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .fillMaxWidth(),
+    var newColor: Color
+    if (index % 2 == 0) {
+        newColor = Color(0xFF9999FF)
+    }
+    else {
+        newColor = Color(0xFF99CCFF)
+    }
+    Surface(modifier = Modifier.fillMaxWidth(), color = newColor) {
+        Row(
+            modifier = modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
-    ) {
+        ) {
         val (checkedVal, setChecked) = rememberSaveable { mutableStateOf(checked) }
 
-
-        Column(modifier = Modifier.defaultMinSize(minWidth = 150.dp)) {
-            Text(
-                text = foodItemViewModel.name.value.toString(),
-                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp),
-                color = MaterialTheme.colors.onSurface
-            )
-            Text(
-                text = "${foodItemViewModel.proteins.value} g, " +
-                        "${foodItemViewModel.fats.value} g, " +
-                        "${foodItemViewModel.carbohydrates.value} g, " +
-                        "${foodItemViewModel.water.value} l, " +
-                        "${foodItemViewModel.kilocalories.value} kcal",
-                style = MaterialTheme.typography.subtitle2,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+            Column(modifier = Modifier.defaultMinSize(minWidth = 150.dp).padding(8.dp)) {
+                Text(
+                    text = foodItemViewModel.name.value.toString(),
+                    style = MaterialTheme.typography.h6.copy(fontSize = 16.sp),
+                    color = MaterialTheme.colors.onSurface
+                )
+                Text(
+                    text = "${foodItemViewModel.proteins.value} g, " +
+                            "${foodItemViewModel.fats.value} g, " +
+                            "${foodItemViewModel.carbohydrates.value} g, " +
+                            "${foodItemViewModel.water.value} l, " +
+                            "${foodItemViewModel.kilocalories.value} kcal",
+                    style = MaterialTheme.typography.subtitle2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Checkbox(
+                checked = checkedVal,
+                modifier = Modifier.padding(end = 8.dp, top = 16.dp),
+                onCheckedChange = {
+                    setChecked(it)
+                    onCheckChange(it)
+                }
             )
         }
-        Checkbox(
-            checked = checkedVal,
-            modifier = Modifier.padding(8.dp),
-            onCheckedChange = {
-                setChecked(it)
-                onCheckChange(it)
-            }
-        )
     }
 }
