@@ -100,6 +100,7 @@ fun FoodItemSelectionRow(
         }
         Checkbox(
             checked = checkedVal,
+            modifier = Modifier.padding(8.dp),
             onCheckedChange = {
                 setChecked(it)
                 onCheckChange(it)

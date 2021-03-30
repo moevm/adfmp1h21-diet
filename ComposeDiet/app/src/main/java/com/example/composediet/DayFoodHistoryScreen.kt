@@ -3,13 +3,17 @@ package com.example.composediet
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -93,17 +97,19 @@ fun FoodItemDayRow(
         modifier = modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(modifier = Modifier.defaultMinSize(minWidth = 100.dp)) {
             Text(
                 text = "food",
-                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp),
+                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif),
                 color = MaterialTheme.colors.onSurface
             )
             Text(
                 text = foodItemViewModel.name.value.toString(),
-                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp),
+                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium, fontFamily = FontFamily.Default),
                 color = MaterialTheme.colors.onSurface
             )
         }
@@ -112,12 +118,14 @@ fun FoodItemDayRow(
 
             Text(
                 text = "time",
-                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp),
+                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif),
                 color = MaterialTheme.colors.onSurface
             )
             Text(
                 text = "${ fullLocalTime.subSequence(0, fullLocalTime.length - 4)}",
-                style = MaterialTheme.typography.subtitle2,
+                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium, fontFamily = FontFamily.Default),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -125,15 +133,18 @@ fun FoodItemDayRow(
         Column(modifier = Modifier.defaultMinSize(minWidth = 100.dp)) {
             Text(
                 text = "amount",
-                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp),
+                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif),
                 color = MaterialTheme.colors.onSurface
             )
             Text(
                 text = "${foodItemViewModel.num.value}",
-                style = MaterialTheme.typography.subtitle2,
+                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium, fontFamily = FontFamily.Default),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }
+        Spacer(Modifier.height(8.dp))
     }
 }

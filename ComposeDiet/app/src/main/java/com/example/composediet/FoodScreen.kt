@@ -149,7 +149,7 @@ fun FoodScreen(
                                         navController.navigate("dish/create")
                                     }
                                 },
-                                modifier = Modifier.padding(16.dp)
+                                modifier = Modifier.padding(16.dp),
                             ) {
                                 Text(text = "Dish")
                             }
