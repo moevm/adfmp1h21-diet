@@ -49,6 +49,7 @@ fun SingleSelectDialog(title: String,
                     onSubmitButtonClick.invoke(selectedOption.value)
                     onDismissRequest.invoke()
                 },
+                    modifier = Modifier.padding(start = 156.dp),
                     shape = MaterialTheme.shapes.medium) {
                     Text(text = submitButtonText)
                 }

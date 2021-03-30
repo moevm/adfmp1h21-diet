@@ -75,6 +75,7 @@ fun WaterScreen(profileViewModel: ProfileViewModel, navController: NavHostContro
                     )
                 }
             }
+            Spacer(Modifier.height(16.dp))
             LazyVerticalGrid(
                 cells = GridCells.Fixed(4),
                 modifier = Modifier.padding(bottom = 64.dp)

@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.*
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.compose.navigate
 
@@ -54,31 +56,42 @@ fun FoodSearchInput(onItemComplete: (FoodItemViewModel) -> Unit) {
 }
 
 @Composable
-fun FoodItemRow(foodItemViewModel: FoodItemViewModel, onItemClicked: (FoodItemViewModel) -> Unit, modifier: Modifier = Modifier){
+fun FoodItemRow(foodItemViewModel: FoodItemViewModel, onItemClicked: (FoodItemViewModel) -> Unit, modifier: Modifier = Modifier, index: Int){
+    var newColor: Color
+    if (index % 2 == 0) {
+        newColor = Color(0xFF9999FF)
+    }
+    else {
+        newColor = Color(0xFF99CCFF)
+    }
     Row(
         modifier = modifier
             .clickable { onItemClicked(foodItemViewModel) }
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            //.padding(horizontal = 16.dp, vertical = 4.dp)
             .fillMaxWidth()
         ,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(modifier = Modifier.defaultMinSize(minWidth = 150.dp)) {
-            Text(
-                text = foodItemViewModel.name.value.toString(),
-                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp),
-                color = MaterialTheme.colors.onSurface
-            )
-            Text(
-                text = "${foodItemViewModel.proteins.value} g, " +
-                        "${foodItemViewModel.fats.value} g, " +
-                        "${foodItemViewModel.carbohydrates.value} g, " +
-                        "${foodItemViewModel.water.value} l, " +
-                        "${foodItemViewModel.kilocalories.value} kcal",
-                style = MaterialTheme.typography.subtitle2,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+        Surface(modifier = Modifier.fillMaxWidth(), color = newColor) {
+            Column(modifier = Modifier.defaultMinSize(minWidth = 150.dp).padding(8.dp)) {
+
+                    Text(
+                        text = foodItemViewModel.name.value.toString(),
+                        style = MaterialTheme.typography.h6.copy(fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif),
+                        color = MaterialTheme.colors.onSurface
+                    )
+                    Text(
+                        text = "${foodItemViewModel.proteins.value} g, " +
+                                "${foodItemViewModel.fats.value} g, " +
+                                "${foodItemViewModel.carbohydrates.value} g, " +
+                                "${foodItemViewModel.water.value} l, " +
+                                "${foodItemViewModel.kilocalories.value} kcal",
+                        style = MaterialTheme.typography.subtitle2,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+            }
         }
     }
 }
@@ -94,6 +107,7 @@ fun FoodScreen(
     val toastText = rememberSaveable { mutableStateOf("")}
     val foodItems: Set<FoodItemViewModel> by foodViewModel.foodItems.observeAsState(setOf())
     val dishes: Set<DishViewModel> by foodViewModel.dishes.observeAsState(setOf())
+    var i: Int = 0
 
     Box {
         Navigation(navController = navController) {
@@ -109,7 +123,9 @@ fun FoodScreen(
                                     toolButtonsVisibleState.value = false
                                     navController.navigate("dish/review")
                                 },
+                                index = i
                             )
+                            i += 1
                         }
                         items(items = foodItems.toList()) { foodItem ->
                             FoodItemRow(
@@ -119,7 +135,9 @@ fun FoodScreen(
                                     toolButtonsVisibleState.value = false
                                     navController.navigate("product/review")
                                 },
+                                index = i
                             )
+                            i += 1
                         }
                     }
                     Column(
@@ -149,7 +167,7 @@ fun FoodScreen(
                                         navController.navigate("dish/create")
                                     }
                                 },
-                                modifier = Modifier.padding(16.dp)
+                                modifier = Modifier.padding(16.dp),
                             ) {
                                 Text(text = "Dish")
                             }
