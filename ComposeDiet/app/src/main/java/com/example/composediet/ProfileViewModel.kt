@@ -13,7 +13,7 @@ enum class Sex {
 
 enum class Diet {
     LoseWeight,
-    GetFat,
+    PutOnWeight,
     HoldWeight,
     Undefined
 }
@@ -25,6 +25,9 @@ class ProfileViewModel : ViewModel() {
 
     private val _weight = MutableLiveData((-1).toShort())
     val weight: LiveData<Short> = _weight
+
+    private val _weightAim = MutableLiveData((-1).toShort())
+    val weightAim: LiveData<Short> = _weightAim
 
     private val _age = MutableLiveData((-1).toShort())
     val age: LiveData<Short> = _age
@@ -131,6 +134,9 @@ class ProfileViewModel : ViewModel() {
         _weight.value = newWeight
     }
 
+    fun onWeightAimChange(newWeight: Short) {
+        _weightAim.value = newWeight
+    }
     fun onAgeChange(newAge: Short) {
         _age.value = newAge
     }

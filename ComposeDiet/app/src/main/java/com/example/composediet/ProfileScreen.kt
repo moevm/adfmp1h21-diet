@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
-
 @ExperimentalComposeUiApi
 @Composable
 fun ProfileScreen(profileViewModel: ProfileViewModel, navController: NavHostController) {
@@ -25,6 +24,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, navController: NavHostCont
 
     val height: Short by profileViewModel.height.observeAsState((-1).toShort())
     val weight: Short by profileViewModel.weight.observeAsState((-1).toShort())
+    val weightAim: Short by profileViewModel.weightAim.observeAsState((-1).toShort())
     val age: Short by profileViewModel.age.observeAsState((-1).toShort())
 
     Navigation(navController = navController) {
@@ -39,10 +39,18 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, navController: NavHostCont
             }
             item {
                 UnsignedIntInput(
-                    name = "Weight",
+                    name = "Current weight",
                     modifier = Modifier.padding(8.dp).fillMaxWidth(),
                     value = weight.toInt(),
                     onValueChange = { profileViewModel.onWeightChange(it.toShort()) }
+                )
+            }
+            item {
+                UnsignedIntInput(
+                    name = "Target weight",
+                    modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                    value = weightAim.toInt(),
+                    onValueChange = { profileViewModel.onWeightAimChange(it.toShort()) }
                 )
             }
             item {
@@ -85,7 +93,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, navController: NavHostCont
                             text = fun(): String {
                                 return when (profileViewModel.diet.value) {
                                     Diet.LoseWeight -> "Losing weight"
-                                    Diet.GetFat -> "Getting fatter"
+                                    Diet.PutOnWeight -> "Putting on weight"
                                     Diet.HoldWeight -> "Holding weight"
                                     else -> "Not set"
                                 }
@@ -145,7 +153,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel, navController: NavHostCont
             onSubmitButtonClick = {
                 when (it) {
                     0 -> profileViewModel.onDietChange(Diet.LoseWeight)
-                    1 -> profileViewModel.onDietChange(Diet.GetFat)
+                    1 -> profileViewModel.onDietChange(Diet.PutOnWeight)
                     2 -> profileViewModel.onDietChange(Diet.HoldWeight)
                 }
             },

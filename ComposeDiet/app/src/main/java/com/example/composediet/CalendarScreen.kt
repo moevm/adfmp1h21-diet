@@ -25,7 +25,7 @@ import androidx.compose.runtime.*
 import java.time.Month
 
 @Composable
-private fun CalendarContent(
+fun CalendarContent(
     selectedDates: String,
     calendarYear: CalendarYear,
     onDayClicked: (CalendarDay, CalendarMonth) -> Unit,
