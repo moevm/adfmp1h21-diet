@@ -18,4 +18,4 @@ jobs:
     - name: Build with Gradle
       run: ./ComposeDiet/gradlew build
     - name: Run unit tests
-      run: ./ComposeDiet/gradlew test
+      run: ./ComposeDiet/gradlew ./ComposeDiet/test
