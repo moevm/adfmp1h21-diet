@@ -18,7 +18,7 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       working-directory: ./ComposeDiet
-      run: gradlew build
+      run: ./gradlew build
     - name: Run unit tests
       working-directory: ./ComposeDiet
-      run: gradlew test
+      run: ./gradlew test
