@@ -1,13 +1,18 @@
 package com.example.composediet
 
 import androidx.lifecycle.*
+import com.example.composediet.calendar.data.DatesRepository
 import com.example.composediet.data.FoodItem
 import com.example.composediet.repositories.FoodItemRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
-open class FoodItemViewModel(private val foodItemRepository: FoodItemRepository): ViewModel() {
-    val foodItems: LiveData<Set<FoodItem>> = foodItemRepository.foodItems.asLiveData()
+@HiltViewModel
+open class FoodItemViewModel
+    @Inject internal constructor(private val foodItemRepository: FoodItemRepository) :ViewModel() {
+    val foodItems: LiveData<List<FoodItem>> = foodItemRepository.foodItems.asLiveData()
 //    private val _name = MutableLiveData("")
 //    val name: LiveData<String> = _name
 //
@@ -31,7 +36,7 @@ open class FoodItemViewModel(private val foodItemRepository: FoodItemRepository)
 
 //    val id: UUID = UUID.randomUUID()
 
-    fun onNameChange(id: ULong, name: String) = viewModelScope.launch {
+    fun onNameChange(id: Long, name: String) = viewModelScope.launch {
         foodItemRepository.updateName(id, name)
     }
 
@@ -39,14 +44,14 @@ open class FoodItemViewModel(private val foodItemRepository: FoodItemRepository)
 //        return _proteins
 //    }
 
-    fun onProteinsChange(id: ULong, proteins: Short) = viewModelScope.launch {
+    fun onProteinsChange(id: Long, proteins: Short) = viewModelScope.launch {
         foodItemRepository.updateProteins(id, proteins)
     }
 
 //    fun getFats(): MutableLiveData<Int> {
 //        return _fats
 //    }
-    fun onFatsChange(id: ULong, fats: Short) = viewModelScope.launch {
+    fun onFatsChange(id: Long, fats: Short) = viewModelScope.launch {
         foodItemRepository.updateFats(id, fats)
     }
 
@@ -54,7 +59,7 @@ open class FoodItemViewModel(private val foodItemRepository: FoodItemRepository)
 //        return _carbohydrates
 //    }
 
-    fun onCarbohydratesChange(id: ULong, carbohydrates: Short) = viewModelScope.launch {
+    fun onCarbohydratesChange(id: Long, carbohydrates: Short) = viewModelScope.launch {
         foodItemRepository.updateCarbohydrates(id, carbohydrates)
     }
 
@@ -62,7 +67,7 @@ open class FoodItemViewModel(private val foodItemRepository: FoodItemRepository)
 //        return _water
 //    }
 
-    fun onWaterChange(id: ULong, water: Short) = viewModelScope.launch {
+    fun onWaterChange(id: Long, water: Short) = viewModelScope.launch {
         foodItemRepository.updateWater(id, water)
     }
 
@@ -70,11 +75,11 @@ open class FoodItemViewModel(private val foodItemRepository: FoodItemRepository)
 //        return _kilocalories
 //    }
 
-    fun onKilocaloriesChange(id: ULong, calories: Short) = viewModelScope.launch {
+    fun onKilocaloriesChange(id: Long, calories: Short) = viewModelScope.launch {
         foodItemRepository.updateCalories(id, calories)
     }
 
-    fun onNumChange(id: ULong, num: Short) = viewModelScope.launch {
+    fun onNumChange(id: Long, num: Short) = viewModelScope.launch {
         foodItemRepository.updateNum(id, num)
     }
 }

@@ -6,9 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.example.composediet.data.FoodItem
 import com.example.composediet.repositories.FoodItemRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class FoodViewModel(private val foodItemRepository: FoodItemRepository) : ViewModel() {
-
+//@HiltViewModel
+class FoodViewModel
+//    @Inject constructor(private val foodItemRepository: FoodItemRepository)
+    :
+    ViewModel() {
 //    private var _foodItems = MutableLiveData(setOf<FoodItemViewModel>())
 
     private var _foodItemSelected = MutableLiveData<FoodItemViewModel?>(null)
@@ -21,13 +26,13 @@ class FoodViewModel(private val foodItemRepository: FoodItemRepository) : ViewMo
     val targetDish: LiveData<DishViewModel> = _targetDish
 
     fun addFoodItem(newFoodItem: FoodItemViewModel) {
-        _foodItems.value = _foodItems.value!! + setOf(newFoodItem)
+//        _foodItems.value = _foodItems.value!! + setOf(newFoodItem)
     }
 
     fun removeFoodItem(item: FoodItemViewModel) {
-        _foodItems.value = _foodItems.value!!.toMutableSet().also {
-            it.remove(item)
-        }
+//        _foodItems.value = _foodItems.value!!.toMutableSet().also {
+//            it.remove(item)
+//        }
     }
 
     fun onFoodItemSelectedChange(item: FoodItemViewModel?) {
@@ -49,19 +54,21 @@ class FoodViewModel(private val foodItemRepository: FoodItemRepository) : ViewMo
     }
 
     fun foodItemExists(targetName: String): Boolean {
-        return !foodItems.value!!.none { it.name.value == targetName }
+//        return !foodItems.value!!.none { it.name.value == targetName }
+        return false
     }
 
     fun dishExists(targetName: String): Boolean {
-        return !dishes.value!!.none { it.name.value == targetName }
+//        return !dishes.value!!.none { it.name.value == targetName }
+        return false
     }
 
     fun isIngredient(foodItem: FoodItemViewModel): Boolean {
-        for (dish in _dishes.value!!) {
-            if (dish.exists(foodItem.name.value.toString())) {
-                return true
-            }
-        }
+//        for (dish in _dishes.value!!) {
+//            if (dish.exists(foodItem.name.value.toString())) {
+//                return true
+//            }
+//        }
         return false
     }
 }

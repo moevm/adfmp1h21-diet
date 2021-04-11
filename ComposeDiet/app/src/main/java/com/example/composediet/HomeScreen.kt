@@ -10,6 +10,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
@@ -29,7 +30,6 @@ fun HomeScreen(navController: NavHostController, profileViewModel: ProfileViewMo
 
     val fatsAchieved: Short by profileViewModel.fatsAchieved.observeAsState(0.toShort())
     val fats: Short by profileViewModel.fats.observeAsState(0.toShort())
-
     Navigation(navController = navController) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                 Column(verticalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.padding(8.dp)) {

@@ -9,6 +9,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import com.example.composediet.calendar.CalendarViewModel
+import com.example.composediet.repositories.DishRepository
+import com.example.composediet.repositories.FoodItemRepository
 import com.example.composediet.ui.theme.ComposeDietTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
@@ -18,7 +20,7 @@ class CoreApplication: Application()
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val foodViewModel by viewModels<FoodViewModel>()
+    val foodViewModel: FoodViewModel by viewModels()
     val profileViewModel by viewModels<ProfileViewModel>()
     val calendarViewModel by viewModels<CalendarViewModel>()
     val foodHistoryViewModel by viewModels<FoodHistoryViewModel>()

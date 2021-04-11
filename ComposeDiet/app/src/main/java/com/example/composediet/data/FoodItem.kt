@@ -6,12 +6,12 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Product")
 data class FoodItem(
     @PrimaryKey(autoGenerate = true)
-    val id: ULong,
-    val name: String,
-    val proteins: Short,
-    val fats: Short,
-    val carbohydrates: Short,
-    val water: Short,
-    val calories: Short,
-    val num: Short
+    var foodItemId: Long,
+    var name: String,
+    var proteins: Short,
+    var fats: Short,
+    var carbohydrates: Short,
+    var water: Short,
+    var calories: Short,
+    var num: Short
 )
