@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.composediet.data
+package com.example.composediet.calendar.data
 
 import com.example.composediet.calendar.model.DatesSelectedState
 import com.example.composediet.calendar.model.DaySelected

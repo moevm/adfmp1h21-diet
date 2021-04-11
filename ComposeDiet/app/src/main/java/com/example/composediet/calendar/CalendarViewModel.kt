@@ -18,13 +18,9 @@ package com.example.composediet.calendar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.composediet.calendar.model.DaySelected
-import com.example.composediet.data.DatesRepository
+import com.example.composediet.calendar.data.DatesRepository
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.composediet.Sex
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 

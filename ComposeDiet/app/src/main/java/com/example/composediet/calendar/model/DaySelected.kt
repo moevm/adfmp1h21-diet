@@ -17,7 +17,7 @@
 package com.example.composediet.calendar.model
 
 
-import com.example.composediet.data.CalendarYear
+import com.example.composediet.calendar.data.CalendarYear
 
 data class DaySelected(val day: Int, val month: CalendarMonth, val year: CalendarYear) {
     val calendarDay = lazy {

@@ -41,8 +41,8 @@ import com.example.composediet.calendar.model.CalendarDay
 import com.example.composediet.calendar.model.CalendarMonth
 import com.example.composediet.calendar.model.DayOfWeek
 import com.example.composediet.calendar.model.DaySelectedStatus
-import com.example.composediet.data.CalendarYear
-import com.example.composediet.data.DatesLocalDataSource
+import com.example.composediet.calendar.data.CalendarYear
+import com.example.composediet.calendar.data.DatesLocalDataSource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color

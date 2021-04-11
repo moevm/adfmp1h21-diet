@@ -3,11 +3,13 @@ package com.example.composediet
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import com.example.composediet.data.FoodItem
+import com.example.composediet.repositories.FoodItemRepository
 
-class FoodViewModel : ViewModel() {
+class FoodViewModel(private val foodItemRepository: FoodItemRepository) : ViewModel() {
 
-    private var _foodItems = MutableLiveData(setOf<FoodItemViewModel>())
-    val foodItems: LiveData<Set<FoodItemViewModel>> = _foodItems
+//    private var _foodItems = MutableLiveData(setOf<FoodItemViewModel>())
 
     private var _foodItemSelected = MutableLiveData<FoodItemViewModel?>(null)
     val foodItemSelected: LiveData<FoodItemViewModel?> = _foodItemSelected

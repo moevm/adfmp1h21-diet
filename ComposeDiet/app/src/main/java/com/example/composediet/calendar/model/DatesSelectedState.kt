@@ -21,7 +21,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.example.composediet.data.CalendarYear
+import com.example.composediet.calendar.data.CalendarYear
 
 class DatesSelectedState(private val year: CalendarYear) {
     private var from by mutableStateOf(DaySelectedEmpty)
