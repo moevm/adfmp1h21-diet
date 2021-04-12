@@ -40,13 +40,13 @@ fun ProductDetailsScreen(
     }
     ProductItemDialog(
         onDelete = {
-//            if (foodViewModel.isIngredient(it)) {
-//                toastText.value = "Denied. Some dish contains this ingredient!"
-//            }
-//            else {
-//                foodViewModel.removeFoodItem(it)
-//                dismiss()
-//            }
+            if (productViewModel.isIngredient(it)) {
+                toastText.value = "Denied. Some dish contains this ingredient!"
+            }
+            else {
+                productViewModel.onDeleteProduct()
+                dismiss()
+            }
         },
         onCreate = {
             if (it.name == "") {

@@ -7,4 +7,5 @@ import javax.inject.Singleton
 @Singleton
 class DishRepository @Inject constructor(private val dishDao: DishDao) {
     fun getAllDishes() = dishDao.getAllDishes()
+    fun isIngredient() = dishDao.isIngredient()
 }

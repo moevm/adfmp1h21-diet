@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.composediet.data.Product
+import com.example.composediet.repositories.DishRepository
 import com.example.composediet.repositories.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -11,11 +12,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 open class ProductViewModel
-    @Inject internal constructor(val product: Product, private val productRepository: ProductRepository) :ViewModel() {
+    @Inject internal constructor(
+        val product: Product,
+        private val productRepository: ProductRepository,
+        private val dishRepository: DishRepository
+    ) :ViewModel() {
 
     fun onAddProduct() = viewModelScope.launch {
         productRepository.insertProduct(product)
     }
+
     fun onDeleteProduct() = viewModelScope.launch {
         productRepository.deleteProduct(product)
     }
@@ -23,4 +29,6 @@ open class ProductViewModel
     fun onUpdateProduct() = viewModelScope.launch {
         productRepository.updateProduct(product)
     }
+
+    fun isIngredient() = dishRepository.isIngredient()
 }

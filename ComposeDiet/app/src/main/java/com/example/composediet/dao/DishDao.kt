@@ -11,6 +11,8 @@ interface DishDao {
     @Query("SELECT * FROM Dish")
     fun getAllDishes(): LiveData<List<Dish>>
 
+    @Query("SELECT ")
+    fun isIngredient(product: Product): Boolean
 //    @Insert(onConflict = OnConflictStrategy.IGNORE)
 //    suspend fun insert(dish: Dish)
 //
