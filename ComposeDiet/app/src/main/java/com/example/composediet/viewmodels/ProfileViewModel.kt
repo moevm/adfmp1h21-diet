@@ -1,4 +1,4 @@
-package com.example.composediet
+package com.example.composediet.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
