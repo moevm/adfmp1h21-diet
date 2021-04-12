@@ -1,33 +1,21 @@
 package com.example.composediet
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.launch
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.navigate
-import androidx.navigation.compose.popUpTo
-import java.time.LocalDateTime
+import com.example.composediet.model.DishWithProductsViewModel
 
 @ExperimentalComposeUiApi
 @Composable
 fun DishDetailsScreen(
     navController: NavHostController,
-    foodViewModel: FoodViewModel,
+    dishWithProducts: DishWithProductsViewModel,
     foodHistoryViewModel: FoodHistoryViewModel,
     profileViewModel: ProfileViewModel,
     prop:String?) {
@@ -98,12 +86,12 @@ fun DishDetailsScreen(
 @ExperimentalComposeUiApi
 @Composable
 private fun DishDialog(
-    onDelete: (DishViewModel) -> Unit = {},
-    onEat: (DishViewModel) -> Unit = {},
-    onCreate: (DishViewModel) -> Unit = {},
-    onChangeIngredients: (DishViewModel) -> Unit = {},
+    onDelete: (DishWithProductsViewModel) -> Unit = {},
+    onEat: (DishWithProductsViewModel) -> Unit = {},
+    onCreate: (DishWithProductsViewModel) -> Unit = {},
+    onChangeIngredients: (DishWithProductsViewModel) -> Unit = {},
     prop: String?,
-    dish: DishViewModel
+    dishWithProducts: DishWithProductsViewModel
 ) {
 //    val (name, setName) = rememberSaveable { mutableStateOf(dish.name.value.toString()) }
 //    val (num, setNum) = rememberSaveable { mutableStateOf(dish.num.value!!.toInt()) }

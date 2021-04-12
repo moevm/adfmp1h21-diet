@@ -1,5 +1,6 @@
 package com.example.composediet
 
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -8,6 +9,10 @@ import androidx.navigation.compose.*
 import androidx.compose.runtime.livedata.observeAsState
 import com.example.composediet.calendar.CalendarViewModel
 import androidx.compose.ui.ExperimentalComposeUiApi
+import com.example.composediet.model.DishSelectedViewModel
+import com.example.composediet.model.FoodViewModel
+import com.example.composediet.model.ProductSelectedViewModel
+import com.example.composediet.model.ProductViewModel
 import java.time.LocalDate
 
 sealed class Screen(val route: String) {
@@ -29,7 +34,9 @@ sealed class Screen(val route: String) {
 fun Router(foodViewModel: FoodViewModel,
            profileViewModel: ProfileViewModel,
            calendarViewModel: CalendarViewModel,
-           foodHistoryViewModel: FoodHistoryViewModel
+           foodHistoryViewModel: FoodHistoryViewModel,
+           productSelectedViewModel: ProductSelectedViewModel,
+           dishSelectedViewModel: DishSelectedViewModel
 ) {
     val navController = rememberNavController()
 
@@ -51,7 +58,9 @@ fun Router(foodViewModel: FoodViewModel,
         composable(Screen.Food.route) {
             FoodScreen(
                 navController = navController,
-                foodViewModel = foodViewModel
+                foodViewModel = foodViewModel,
+                productSelectedViewModel = productSelectedViewModel,
+                dishSelectedViewModel = dishSelectedViewModel
             )
         }
         composable(Screen.Profile.route) {
@@ -75,20 +84,20 @@ fun Router(foodViewModel: FoodViewModel,
         composable(Screen.ProductDetails.route) { backStackEntry ->
             ProductDetailsScreen(
                 navController = navController,
-                foodViewModel = foodViewModel,
+                productViewModel = ProductViewModel(productSelectedViewModel.selected.value!!),
                 foodHistoryViewModel = foodHistoryViewModel,
                 profileViewModel = profileViewModel,
                 backStackEntry.arguments?.getString("prop")
             )
         }
         composable(Screen.DishDetails.route) { backStackEntry ->
-            DishDetailsScreen(
-                navController = navController,
-                foodViewModel = foodViewModel,
-                foodHistoryViewModel = foodHistoryViewModel,
-                profileViewModel = profileViewModel,
-                backStackEntry.arguments?.getString("prop")
-            )
+//            DishDetailsScreen(
+//                navController = navController,
+//                foodViewModel = foodViewModel,
+//                foodHistoryViewModel = foodHistoryViewModel,
+//                profileViewModel = profileViewModel,
+//                backStackEntry.arguments?.getString("prop")
+//            )
         }
         composable(Screen.DayFoodHistory.route) {
             DayFoodHistoryScreen(

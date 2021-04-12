@@ -18,28 +18,28 @@ import androidx.navigation.compose.navigate
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.compose.popUpTo
+import com.example.composediet.data.Product
+import com.example.composediet.model.ProductSelectedViewModel
+import com.example.composediet.model.ProductViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 @ExperimentalComposeUiApi
 @Composable
 fun ProductDetailsScreen(
     navController: NavHostController,
-    foodViewModel: FoodViewModel,
+    productViewModel: ProductViewModel,
     foodHistoryViewModel: FoodHistoryViewModel,
     profileViewModel: ProfileViewModel,
     prop:String?
 ) {
-//    val toastText = rememberSaveable { mutableStateOf("")}
-//    val dismiss = {
-//        foodViewModel.onFoodItemSelectedChange(null)
-//        navController.navigate(Screen.Food.route) {
-//            popUpTo(Screen.Profile.route) {}
-//        }
-//    }
-//
-//    ProductItemDialog(
-//        onDelete = {
+    val toastText = rememberSaveable { mutableStateOf("")}
+    val dismiss = {
+        navController.navigate(Screen.Food.route) {
+            popUpTo(Screen.Profile.route) {}
+        }
+    }
+    ProductItemDialog(
+        onDelete = {
 //            if (foodViewModel.isIngredient(it)) {
 //                toastText.value = "Denied. Some dish contains this ingredient!"
 //            }
@@ -47,215 +47,216 @@ fun ProductDetailsScreen(
 //                foodViewModel.removeFoodItem(it)
 //                dismiss()
 //            }
-//        },
-//        onCreate = {
-//            if (it.name.value.toString() == "") {
-//                toastText.value = "Denied. Name must not be empty!"
-//            }
-//            else if (foodViewModel.foodItemExists(it.name.value.toString())) {
+        },
+        onCreate = {
+            if (it.name == "") {
+                toastText.value = "Denied. Name must not be empty!"
+            }
+//            else if (foodViewModel.foodItemExists(it.name)) {
 //                toastText.value = "Denied. There is product with such name!"
 //            }
-//            else if (foodViewModel.dishExists(it.name.value.toString())) {
+//            else if (foodViewModel.dishExists(it.name)) {
 //                toastText.value = "Denied. There is dish with such name!"
 //            }
-//            else {
-//                foodViewModel.addFoodItem(it)
-//                dismiss()
-//            }
-//        },
-//        onEat = {
-//            try {
+            else {
+                productViewModel.onAddProduct()
+                dismiss()
+            }
+        },
+        onEat = {
+            try {
 //                foodHistoryViewModel.addFoodItem(it, LocalDateTime.now())
 //                profileViewModel.onKilocaloriesAchievedChange((it.kilocalories.value!!.toFloat() * it.num.value!!.toFloat() / 100).toInt().toShort())
 //                profileViewModel.onDrunkWaterNumChange(it.water.value!!.toShort())
 //                profileViewModel.onProteinsAchievedChange((it.proteins.value!!.toFloat() * it.num.value!!.toFloat() / 100).toInt().toShort())
 //                profileViewModel.onFatsAchievedChange((it.fats.value!!.toFloat() * it.num.value!!.toFloat() / 100).toInt().toShort())
 //                profileViewModel.onCarbohydratesAchievedChange((it.carbohydrates.value!!.toFloat() * it.num.value!!.toFloat() / 100).toInt().toShort())
-//                dismiss()
-//            }
-//            catch (e: NumberFormatException) {
-//                toastText.value = "Denied. It's impossible!"
-//            }
-//        },
-//        prop = prop,
-//        foodItem = if (foodViewModel.foodItemSelected.value != null) foodViewModel.foodItemSelected.value!! else FoodItemViewModel()
-//    )
+                dismiss()
+            }
+            catch (e: NumberFormatException) {
+                toastText.value = "Denied. It's impossible!"
+            }
+        },
+        prop = prop,
+        product = if (foodViewModel.foodItemSelected.value != null) foodViewModel.foodItemSelected.value!! else Product(-1, "", 0, 0, 0, 0, 0, 0)
+    )
 
-//    Toast(
-//        show = toastText.value != "",
-//        text = toastText.value,
-//        onClose = { toastText.value = "" },
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(8.dp)
-//            .height(56.dp)
-//    )
+    Toast(
+        show = toastText.value != "",
+        text = toastText.value,
+        onClose = { toastText.value = "" },
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+            .height(56.dp)
+    )
 }
 
 @ExperimentalComposeUiApi
 @Composable
 private fun ProductItemDialog(
-    onDelete: (FoodItemViewModel) -> Unit = {},
-    onEat: (FoodItemViewModel) -> Unit = {},
-    onCreate: (FoodItemViewModel) -> Unit = {},
+    onDelete: (Product) -> Unit = {},
+    onEat: (Product) -> Unit = {},
+    onCreate: (Product) -> Unit = {},
     prop: String?,
-    foodItem: FoodItemViewModel
+    product: Product
 ) {
-//    val (name, setName) = rememberSaveable { mutableStateOf(foodItem.name.value.toString()) }
-//    val (proteins, setProteins) = rememberSaveable { mutableStateOf(foodItem.proteins.value!!.toInt()) }
-//    val (fats, setFats) = rememberSaveable { mutableStateOf(foodItem.fats.value!!.toInt()) }
-//    val (carbohydrates, setCarbohydrates) = rememberSaveable { mutableStateOf(foodItem.carbohydrates.value!!.toInt()) }
-//    val (water, setWater) = rememberSaveable { mutableStateOf(foodItem.water.value!!.toInt()) }
-//    val (kilocalories, setKilocalories) = rememberSaveable { mutableStateOf(foodItem.kilocalories.value!!.toInt()) }
-//    val (num, setNum) = rememberSaveable { mutableStateOf(foodItem.num.value!!.toInt()) }
-//
-//    val listState = rememberLazyListState()
-//    val coroutineScope = rememberCoroutineScope()
-//
-//    if (prop == "review") {
-//        coroutineScope.launch {
-//            listState.animateScrollToItem(8)
-//        }
-//    }
-//    LazyColumn(state = listState) {
-//        item {
-//            TextInput(
-//                name = "Name",
-//                value = name,
-//                onValueChange = {
-//                    setName(it)
-//                    foodItem.onNameChange(it)
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .fillMaxWidth()
-//            )
-//        }
-//        item {
-//            UnsignedIntInput(
-//                name = "Proteins",
-//                value = proteins,
-//                onValueChange = {
-//                    setProteins(it)
-//                    foodItem.onProteinsChange(it)
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .fillMaxWidth()
-//            )
-//        }
-//        item {
-//            UnsignedIntInput(
-//                name = "Fats",
-//                value = fats,
-//                onValueChange = {
-//                    setFats(it)
-//                    foodItem.onFatsChange(it)
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .fillMaxWidth()
-//            )
-//        }
-//        item {
-//            UnsignedIntInput(
-//                name = "Carbohydrates",
-//                value = carbohydrates,
-//                onValueChange = {
-//                    setCarbohydrates(it)
-//                    foodItem.onCarbohydratesChange(it)
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .fillMaxWidth()
-//            )
-//        }
-//        item {
-//            UnsignedIntInput(
-//                name = "Water",
-//                value = water,
-//                onValueChange = {
-//                    setWater(it)
-//                    foodItem.onWaterChange(it)
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .fillMaxWidth()
-//            )
-//        }
-//        item {
-//            UnsignedIntInput(
-//                name = "Kilocalories",
-//                value = kilocalories,
-//                onValueChange = {
-//                    setKilocalories(it)
-//                    foodItem.onKilocaloriesChange(it)
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .fillMaxWidth()
-//            )
-//        }
-//        item {
-//            UnsignedIntInput(
-//                name = "amount",
-//                value = num,
-//                onValueChange = {
-//                    setNum(it)
-//                    foodItem.onNumChange(it)
-//                },
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .fillMaxWidth()
-//            )
-//        }
-//        when(prop) {
-//            "create" -> {
-//                item {
-//                    Button(
-//                        onClick = {
-//                            foodItem.onNameChange(name)
-//                            foodItem.onProteinsChange(proteins)
-//                            foodItem.onFatsChange(fats)
-//                            foodItem.onCarbohydratesChange(carbohydrates)
-//                            foodItem.onWaterChange(water)
-//                            foodItem.onKilocaloriesChange(kilocalories)
-//                            onCreate(foodItem)
-//                       },
-//                        modifier = Modifier
-//                            .padding(8.dp)
-//                            .fillMaxWidth()
-//                            .height(56.dp)
-//                    ) {
-//                        Text(text = "Create")
-//                    }
-//                }
-//            }
-//            "review" -> {
-//                item {
-//                    Button(
-//                        onClick = { onDelete(foodItem) },
-//                        modifier = Modifier
-//                            .padding(8.dp)
-//                            .fillMaxWidth()
-//                            .height(56.dp)
-//                    ) {
-//                        Text(text = "Delete")
-//                    }
-//                }
-//                item {
-//                    Button(
-//                        onClick = { onEat(foodItem) },
-//                        modifier = Modifier
-//                            .padding(8.dp)
-//                            .fillMaxWidth()
-//                            .height(56.dp)
-//
-//                    ) {
-//                        Text(text = "Eat it!")
-//                    }
-//                }
-//            }
-//        }
-//    }
+    val (name, setName) = rememberSaveable { mutableStateOf(product.name) }
+    val (proteins, setProteins) = rememberSaveable { mutableStateOf(product.proteins) }
+    val (fats, setFats) = rememberSaveable { mutableStateOf(product.fats) }
+    val (carbohydrates, setCarbohydrates) = rememberSaveable { mutableStateOf(product.carbohydrates) }
+    val (water, setWater) = rememberSaveable { mutableStateOf(product.water) }
+    val (calories, setKilocalories) = rememberSaveable { mutableStateOf(product.calories) }
+    val (num, setNum) = rememberSaveable { mutableStateOf(product.num) }
+
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    if (prop == "review") {
+        coroutineScope.launch {
+            listState.animateScrollToItem(8)
+        }
+    }
+    LazyColumn(state = listState) {
+        item {
+            TextInput(
+                name = "Name",
+                value = name,
+                onValueChange = {
+                    setName(it)
+                    product.name = it
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+        }
+        item {
+            UnsignedIntInput(
+                name = "Proteins",
+                value = proteins.toInt(),
+                onValueChange = {
+                    setProteins(it.toShort())
+                    product.proteins = it.toShort()
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+        }
+        item {
+            UnsignedIntInput(
+                name = "Fats",
+                value = fats.toInt(),
+                onValueChange = {
+                    setFats(it.toShort())
+                    product.fats = it.toShort()
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+        }
+        item {
+            UnsignedIntInput(
+                name = "Carbohydrates",
+                value = carbohydrates.toInt(),
+                onValueChange = {
+                    setCarbohydrates(it.toShort())
+                    product.carbohydrates = it.toShort()
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+        }
+        item {
+            UnsignedIntInput(
+                name = "Water",
+                value = water.toInt(),
+                onValueChange = {
+                    setWater(it.toShort())
+                    product.water = it.toShort()
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+        }
+        item {
+            UnsignedIntInput(
+                name = "Kilocalories",
+                value = calories.toInt(),
+                onValueChange = {
+                    setKilocalories(it.toShort())
+                    product.calories = it.toShort()
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+        }
+        item {
+            UnsignedIntInput(
+                name = "amount",
+                value = num.toInt(),
+                onValueChange = {
+                    setNum(it.toShort())
+                    product.num = it.toShort()
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+        }
+        when(prop) {
+            "create" -> {
+                item {
+                    Button(
+                        onClick = {
+
+                            product.name = name
+                            product.proteins = proteins
+                            product.fats = fats
+                            product.carbohydrates = carbohydrates
+                            product.water = water
+                            product.calories = calories
+                            onCreate(product)
+                       },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text(text = "Create")
+                    }
+                }
+            }
+            "review" -> {
+                item {
+                    Button(
+                        onClick = { onDelete(product) },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text(text = "Delete")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { onEat(product) },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .height(56.dp)
+
+                    ) {
+                        Text(text = "Eat it!")
+                    }
+                }
+            }
+        }
+    }
 }

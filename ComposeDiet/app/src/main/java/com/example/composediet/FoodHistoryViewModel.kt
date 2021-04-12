@@ -3,25 +3,27 @@ package com.example.composediet
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.composediet.model.DishWithProductsViewModel
+import com.example.composediet.model.ProductViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 class FoodHistoryViewModel : ViewModel() {
-    private var _foodItemsAndTime = MutableLiveData(listOf<Pair<LocalDateTime, FoodItemViewModel>>())
-    val foodItemsAndTime: LiveData<List<Pair<LocalDateTime, FoodItemViewModel>>> = _foodItemsAndTime
+    private var _foodItemsAndTime = MutableLiveData(listOf<Pair<LocalDateTime, ProductViewModel>>())
+    val foodItemsAndTime: LiveData<List<Pair<LocalDateTime, ProductViewModel>>> = _foodItemsAndTime
 
-    private var _dishAndTime = MutableLiveData(listOf<Pair<LocalDateTime, DishViewModel>>())
-    val dishAndTime: LiveData<List<Pair<LocalDateTime, DishViewModel>>> = _dishAndTime
+    private var _dishAndTime = MutableLiveData(listOf<Pair<LocalDateTime, DishWithProductsViewModel>>())
+    val dishWithProductsAndTime: LiveData<List<Pair<LocalDateTime, DishWithProductsViewModel>>> = _dishAndTime
 
-    fun addFoodItem(newFoodItem: FoodItemViewModel, dateTime: LocalDateTime) {
-        _foodItemsAndTime.value = _foodItemsAndTime.value!! + setOf(Pair(dateTime, newFoodItem))
+    fun addFoodItem(newProduct: ProductViewModel, dateTime: LocalDateTime) {
+        _foodItemsAndTime.value = _foodItemsAndTime.value!! + setOf(Pair(dateTime, newProduct))
     }
 
-    fun addDish(newDish: DishViewModel, dateTime: LocalDateTime) {
-        _dishAndTime.value = _dishAndTime.value!! + setOf(Pair(dateTime, newDish))
+    fun addDish(newDishWithProducts: DishWithProductsViewModel, dateTime: LocalDateTime) {
+        _dishAndTime.value = _dishAndTime.value!! + setOf(Pair(dateTime, newDishWithProducts))
     }
 
-    fun getDishesByDay(localDate: LocalDate): List<Pair<LocalDateTime, DishViewModel>> {
+    fun getDishesByDay(localDate: LocalDate): List<Pair<LocalDateTime, DishWithProductsViewModel>> {
         return _dishAndTime.value!!.filter {
             it.first.year == localDate.year &&
             it.first.month == localDate.month &&
@@ -29,7 +31,7 @@ class FoodHistoryViewModel : ViewModel() {
         }
     }
 
-    fun getFoodItemsByDay(localDate: LocalDate): List<Pair<LocalDateTime, FoodItemViewModel>> {
+    fun getFoodItemsByDay(localDate: LocalDate): List<Pair<LocalDateTime, ProductViewModel>> {
         return _foodItemsAndTime.value!!.filter {
             it.first.year == localDate.year &&
             it.first.month == localDate.month &&
