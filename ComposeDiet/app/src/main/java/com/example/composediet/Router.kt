@@ -8,6 +8,9 @@ import androidx.navigation.compose.*
 import androidx.compose.runtime.livedata.observeAsState
 import com.example.composediet.calendar.CalendarViewModel
 import androidx.compose.ui.ExperimentalComposeUiApi
+import com.example.composediet.models.FoodHistoryViewModel
+import com.example.composediet.models.FoodViewModel
+import com.example.composediet.models.ProfileViewModel
 import java.time.LocalDate
 
 sealed class Screen(val route: String) {

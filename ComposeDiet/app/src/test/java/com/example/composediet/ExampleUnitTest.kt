@@ -6,6 +6,9 @@ import org.junit.Assert.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.composediet.models.DishViewModel
+import com.example.composediet.models.FoodHistoryViewModel
+import com.example.composediet.models.FoodItemViewModel
 import org.junit.Before
 import org.junit.Rule
 

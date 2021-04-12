@@ -21,6 +21,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.compose.navigate
+import com.example.composediet.models.DishViewModel
+import com.example.composediet.models.FoodItemViewModel
+import com.example.composediet.models.FoodViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

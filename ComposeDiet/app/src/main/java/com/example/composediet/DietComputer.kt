@@ -1,5 +1,7 @@
 package com.example.composediet
 
+import com.example.composediet.models.Diet
+import com.example.composediet.models.Sex
 import java.time.LocalDate
 
 class DietComputer(val height: Short, val weight: Short, val age: Short, val sex: Sex, val dietAim: Diet, val dateBegin: LocalDate) {

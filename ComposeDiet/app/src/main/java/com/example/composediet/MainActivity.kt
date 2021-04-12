@@ -9,6 +9,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import com.example.composediet.calendar.CalendarViewModel
+import com.example.composediet.models.FoodHistoryViewModel
+import com.example.composediet.models.FoodViewModel
+import com.example.composediet.models.ProfileViewModel
 import com.example.composediet.ui.theme.ComposeDietTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
