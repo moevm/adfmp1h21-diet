@@ -15,9 +15,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.composediet.models.Diet
-import com.example.composediet.models.ProfileViewModel
-import com.example.composediet.models.Sex
+import com.example.composediet.viewmodels.Diet
+import com.example.composediet.viewmodels.ProfileViewModel
+import com.example.composediet.viewmodels.Sex
 
 @ExperimentalComposeUiApi
 @Composable

@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.navigate
 import androidx.navigation.compose.popUpTo
-import com.example.composediet.models.*
+import com.example.composediet.viewmodels.*
 import java.time.LocalDateTime
 
 @ExperimentalComposeUiApi

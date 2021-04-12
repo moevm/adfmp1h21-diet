@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.composediet.models.ProfileViewModel
+import com.example.composediet.viewmodels.ProfileViewModel
 import kotlin.math.roundToInt
 
 fun Float.roundToDecimals(decimals: Int): Float {

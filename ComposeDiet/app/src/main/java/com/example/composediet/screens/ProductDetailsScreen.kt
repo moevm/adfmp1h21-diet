@@ -18,10 +18,10 @@ import androidx.navigation.compose.navigate
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.compose.popUpTo
-import com.example.composediet.models.FoodHistoryViewModel
-import com.example.composediet.models.FoodItemViewModel
-import com.example.composediet.models.FoodViewModel
-import com.example.composediet.models.ProfileViewModel
+import com.example.composediet.viewmodels.FoodHistoryViewModel
+import com.example.composediet.viewmodels.FoodItemViewModel
+import com.example.composediet.viewmodels.FoodViewModel
+import com.example.composediet.viewmodels.ProfileViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 

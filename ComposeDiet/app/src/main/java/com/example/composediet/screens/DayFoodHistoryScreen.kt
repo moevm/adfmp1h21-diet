@@ -15,8 +15,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.composediet.models.FoodHistoryViewModel
-import com.example.composediet.models.FoodItemViewModel
+import com.example.composediet.viewmodels.FoodHistoryViewModel
+import com.example.composediet.viewmodels.FoodItemViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 

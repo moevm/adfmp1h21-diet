@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.composediet.models.ProfileViewModel
+import com.example.composediet.viewmodels.ProfileViewModel
 
 @Composable
 fun HomeScreen(navController: NavHostController, profileViewModel: ProfileViewModel) {
